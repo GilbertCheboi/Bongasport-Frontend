@@ -1,11 +1,12 @@
 import { View, Text, FlatList, Dimensions,SafeAreaView, Alert, Image, StyleSheet, TouchableOpacity, TouchableHighlight, ScrollView } from 'react-native'
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState, useContext } from 'react'
 import { FAB } from "@rneui/base";
 import { Card } from 'react-native-paper';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { useNavigation } from '@react-navigation/native';
 import { Header, Icon } from "@rneui/base";
 // import { Header  as HeaderRNE, HeaderProps, Icon  } from "@rneui/themed";
+import { AuthContext } from '../context/AuthContext';
 
 
 export default function Formular1Screen(props) {
@@ -13,10 +14,14 @@ export default function Formular1Screen(props) {
   const [data, setData] = useState([]) 
   const [loading, setLoading] = useState(true)
   const [liked, setLiked] = useState(false);
+  const {userToken, userInfo} = useContext(AuthContext);
 
   const loadData = () => { 
     fetch('http://gilscore.azurewebsites.net/api/Formula1/feed/', {
-      method: 'GET'
+      method: 'GET',
+      headers:{
+        'Authorization': 'Token ' + userToken
+      }
      }) 
      .then(resp => resp.json())
      .then(data => {
