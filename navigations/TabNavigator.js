@@ -5,7 +5,7 @@ import { MaterialCommunityIcons } from '@expo/vector-icons';
 import Home from '../screens/Home';
 import Notification from '../screens/Notification';
 import SettingsScreen from '../screens/SettingsScreen';
-import FeedStack from './FeedStack';
+
 import BaseballStack from './BaseballStack';
 import FootballStack from './FootballStack';
 import ProfileScreen from '../screens/ProfileScreen';

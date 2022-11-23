@@ -45,9 +45,7 @@ export default function ProfileScreen() {
       <Avatar
         rounded
         size="large"
-        source={{ uri: "https://assets.goal.com/v3/assets/bltcc7a7ffd2fbf71f5/blta18ee49d1accc927/6336dc51e0d20d1ce84da1ff/GettyImages-1421030506.jpg"
-        //   uri: profile ? profile.avatar.filename : null,
-        }}
+        source={{ uri:data.image}}
         containerStyle={styles.avatar}
       />
       <View style={styles.profileInfo}>
@@ -84,7 +82,8 @@ const styles = StyleSheet.create({
     container: {},
     cover: {
       width: "100%",
-      height: 100,
+      height: 140,
+      marginTop:20
     },
     avatar: {
       marginLeft: 20,

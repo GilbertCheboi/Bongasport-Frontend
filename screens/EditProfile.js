@@ -1,5 +1,5 @@
-import { Image, ImageBackground, StyleSheet, Text, View, ScrollView } from 'react-native';
-import React, { useState } from 'react'
+import { Image, ImageBackground, StyleSheet, Text, TextInput, Button, View, ScrollView } from 'react-native';
+import React, { useState, useContext } from 'react'
 import { useNavigation } from '@react-navigation/native';
 import { AuthContext } from '../context/AuthContext';
 import * as ImagePicker from 'expo-image-picker';
@@ -54,8 +54,10 @@ export default function EditProfile() {
   return (
     
     <ScrollView>
+
+      <Text>Edit your Profile</Text>
     <DropDownPicker 
-      soccerIcon = {[
+      soccerIcon  = {[
         {
           label: "select Team",
           value: "Arsenal",

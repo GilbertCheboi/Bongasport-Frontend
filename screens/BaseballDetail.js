@@ -3,7 +3,7 @@ import React, { Component, useState,useEffect } from 'react'
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 
 
-export default function Formula1Detail(props) {
+export default function BaseballDetail(props) {
   const data = props.route.params.data;
   const [liked, setLiked] = useState(false);
   const [comment, setComment] = useState([]) 
@@ -70,7 +70,7 @@ export default function Formula1Detail(props) {
                         <TouchableOpacity>
                         <Image
                           style={styles.photo}
-                          source={{uri: data.user.Formula1}}/>
+                          source={{uri: data.user.Baseball}}/>
                         </TouchableOpacity>
                     </View> 
                     

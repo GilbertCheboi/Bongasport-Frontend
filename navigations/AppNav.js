@@ -4,6 +4,7 @@ import { AuthContext } from '../context/AuthContext';
 import { ActivityIndicator, View } from 'react-native';
 import AuthStack from './AuthStack';
 import DrawerNavigator from './DrawerNavigator';
+import ProfileStack from './ProfileStack';
 
 
 export default function AppNav () {
@@ -19,7 +20,7 @@ export default function AppNav () {
 
   return (
     <NavigationContainer>
-       {userToken !== null ? <DrawerNavigator/> : <AuthStack/>}
+       {userToken !== null ? <DrawerNavigator/> :<AuthStack/> }
     </NavigationContainer>
   )
 }

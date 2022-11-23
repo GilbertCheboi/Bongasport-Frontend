@@ -146,7 +146,7 @@ const navigation =useNavigation();
   return (
     <SafeAreaView>
       <Header
-      backgroundColor="#09899b"
+      backgroundColor="#286086"
       backgroundImageStyle={{}}
       barStyle="default"
       centerComponent={
@@ -238,8 +238,8 @@ const styles = StyleSheet.create({
   container: {
     borderBottomColor: "black",
     // borderBottomWidth: 2,
-    paddingBottom:10,
-    paddingTop: 5,
+    paddingBottom:20,
+    paddingTop: 13,
     marginTop:5,
     // marginBottom: 10,
     borderRadius: 10,
@@ -289,8 +289,8 @@ const styles = StyleSheet.create({
 
   innerHeaderContainer: { 
     // backgroundColor: '#FFf',
-    // backgroundColor: '#B6D0E2',
-    // borderRadius: 10,
+     backgroundColor: '#B6D0E2',
+     borderRadius: 10,
     // alignItems:'center',
     borderColor: "#09899b",
     // borderWidth: 1,
@@ -311,7 +311,7 @@ const styles = StyleSheet.create({
     width: 50,
     height: 50,
     borderRadius: 50,
-    // marginTop: 15
+     marginTop: 5
   },
   info: {
     width:'50%',
@@ -329,12 +329,10 @@ const styles = StyleSheet.create({
   },
   userName: { color: "black", fontWeight: "bold", fontSize:12, },
   userHandleAndTime: {
-    // color: "rgb(136, 153, 166)",
+    color: "rgb(136, 153, 166)",
     fontWeight: "bold",
-    color: "#09899b",
-    fontSize:15,
+    //color: "#09899b",
     marginLeft: 5,
-    
     fontStyle: 'italic',
   },
   BodyContainer:{
@@ -349,7 +347,7 @@ const styles = StyleSheet.create({
 
   },
   tweetTextContainer: { borderColor: "blue", borderWidth: 0, },
-  tweetText: { color: "black", paddingRight: 10, fontSize:16,  },
+  tweetText: { color: "black", paddingRight: 10, fontSize:15,  },
   tweetActionsContainer: {
     borderColor: "blue",
     borderWidth: 0,
@@ -359,7 +357,7 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     borderColor: "#09899b",
     borderTopWidth: 0.3,
-    width:"70%",
+    width:"95%",
   },
   commentButton: {
     paddingLeft: 0,

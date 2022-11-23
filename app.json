@@ -5,7 +5,7 @@
     "owner":"zerxis",
     "version": "1.0.0",
     "orientation": "portrait",
-    "icon": "./assets/icon.png",
+    "icon": "./assets/bongasport.jpeg",
     "userInterfaceStyle": "light",
     "splash": {
       "image": "./assets/icon.png",

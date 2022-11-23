@@ -1,19 +1,27 @@
-import { View, Text, FlatList, Dimensions, Alert, Image, StyleSheet, TouchableOpacity, TouchableHighlight, ScrollView } from 'react-native'
-import React, { useEffect, useState } from 'react'
-import {  FAB } from "@rneui/themed";
+import { View, Text, FlatList, Dimensions,SafeAreaView, Alert, Image, StyleSheet, TouchableOpacity, TouchableHighlight, ScrollView } from 'react-native'
+import React, { useEffect, useState, useContext } from 'react'
+import { FAB } from "@rneui/base";
 import { Card } from 'react-native-paper';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { useNavigation } from '@react-navigation/native';
+import { Header, Icon } from "@rneui/base";
+// import { Header  as HeaderRNE, HeaderProps, Icon  } from "@rneui/themed";
+import { AuthContext } from '../context/AuthContext';
 
 
 export default function NFLScreen(props) {
+
   const [data, setData] = useState([]) 
   const [loading, setLoading] = useState(true)
   const [liked, setLiked] = useState(false);
+  const {userToken, userInfo} = useContext(AuthContext);
 
   const loadData = () => { 
-    fetch('http://192.168.25.105:8000/api/NFL/feed/', {
-      method: 'GET'
+    fetch('http://gilscore.azurewebsites.net/api/NFL/feed/', {
+      method: 'GET',
+      headers:{
+        'Authorization': 'Token ' + userToken
+      }
      }) 
      .then(resp => resp.json())
      .then(data => {
@@ -23,17 +31,31 @@ export default function NFLScreen(props) {
      .catch(error => Alert.alert('Error', error.message))
    }
 
+   const likeAction =() => {
+    fetch('http://gilscore.azurewebsites.net/api/NFL/action/', {
+      method: 'POST',
+      headers: {
+        'Content-Type':'application/json'
+      },
+        body: JSON.stringify(data)
+    })
+    // .then(resp => resp.json())
+    // .then(data => { 
+    //   console.log(data)
+    //   props.navigation.navigate('Formular1')
+    // })
+    // .catch(error=> Alert.alert('Error', error.message))
+  }
+ 
   useEffect(() => {
      loadData();
-    }, [])
-    
+    }, [])  
 
     const clickedItem = (data) => { 
       props.navigation.navigate('Detail NFL',{data:data}) }
 
   const renderData = (item) => {  
 
-    var width = Dimensions.get('window').width;
     return(
         <Card        onPress= {() => clickedItem(item)} >
                        
@@ -53,8 +75,8 @@ export default function NFLScreen(props) {
                 <View style={styles.info}>
                   <View style={styles.userDetails}>
                     <Text style={styles.userName}>{item.user.first_name}
-                      <Text style={styles.userHandleAndTime}>  @{item.user.username} ·{item.timestamp}   :{}</Text>
-                      <Text>IEBC</Text>
+                      <Text style={styles.userHandleAndTime}>  @{item.user.username} {item.timestamp}   {}</Text>
+                      
                     </Text>
                   </View>
                 </View>
@@ -84,15 +106,15 @@ export default function NFLScreen(props) {
                 <View>
                   <View style={styles.tweetActionsContainer}>
                     <TouchableOpacity style={styles.commentButton}>
-                      <MaterialCommunityIcons name="repeat" style={styles.commentButtonIcon} size={25} color={'rgb(136, 153, 166)'} />
-                      <Text style={styles.commentsCount}>xxx</Text>
+                      <MaterialCommunityIcons name="reply" style={styles.commentButtonIcon} size={20} color={'#09899b'} />
+                      <Text style={styles.commentsCount}>4</Text>
                     </TouchableOpacity>
                     <TouchableOpacity  style={styles.retweetButton}>
                       {/* <EvilIcons name={'retweet'} size={25} color={(retweeted) ? "rgb(23, 191, 99)":'rgb(136, 153, 166)'}/> */}
-                      <MaterialCommunityIcons name="repeat" size={25} color={'rgb(136, 153, 166)'} />
-                      <Text style={[styles.retweetButtonIcon, {color:"rgb(136, 153, 166)",fontWeight:"bold"}]}>xxx</Text>
+                      <MaterialCommunityIcons name="repeat" size={20} color={'#09899b'} />
+                      <Text style={[styles.retweetButtonIcon, {color:"#09899b",fontWeight:"bold"}]}></Text>
                     </TouchableOpacity>
-                    <TouchableOpacity style={styles.likeButton} onPress={() => setLiked((isLiked) => !isLiked)}>
+                    <TouchableOpacity style={styles.likeButton} onPress={() => likeAction()}>
                     <MaterialCommunityIcons
                       name={liked ? "heart" : "heart-outline"}
                       size={20}
@@ -102,7 +124,7 @@ export default function NFLScreen(props) {
                     </TouchableOpacity>
                     <TouchableOpacity style={styles.shareButton}>
                       {/* <SimpleLineIcons name={'share'} size={16} color={'rgb(136, 153, 166)'}/> */}
-                      <MaterialCommunityIcons name="share-variant" size={16} color={'rgb(136, 153, 166)'} />
+                      <MaterialCommunityIcons name="share-variant" size={16} color={'#09899b'} />
 
                     </TouchableOpacity>
                   </View>
@@ -122,7 +144,57 @@ const navigation =useNavigation();
 
  
   return (
-    <View >
+    <SafeAreaView>
+      <Header
+      backgroundColor="#286086"
+      backgroundImageStyle={{}}
+      barStyle="default"
+      centerComponent={
+        <Image
+        style={styles.tinyLogo}
+        source={require('../assets/f1.jpg')}
+      />
+      // {
+        // text: "Formula 1",
+        // style: { color: "#fff",  fontSize: 22,
+        // fontWeight: 'bold', }
+      }
+    // }
+      centerContainerStyle={{}}
+      // containerStyle={{ width: 350 }}
+      leftComponent={ <View style={styles.headerRight}>
+      <TouchableOpacity
+        style={{ marginLeft: 10 }}>
+        <Icon name= "menu" color="white"  onPress={()=> navigation.openDrawer()}/>
+      </TouchableOpacity>
+    </View>}
+    // { icon: "menu", color: "#fff" }}
+      leftContainerStyle={{}}
+      linearGradientProps={{}}
+      placement="center"
+      rightComponent={{
+        icon: "person-outline",
+        color: "#fff"
+      }}
+      rightContainerStyle={{}}
+      statusBarProps={{}}
+    />
+      {/* <HeaderRNE
+      statusB
+      leftComponent={{
+        icon: 'menu',
+        color: '#fff',
+      }}
+      rightComponent={
+          <View style={styles.headerRight}>
+            <TouchableOpacity
+              style={{ marginLeft: 10 }}>
+              <icon:"menu" color="white"  onPress={()=> navigation.openDrawer()}/>
+            </TouchableOpacity>
+          </View>
+      }
+      centerComponent={{ text: 'Formula 1', style: styles.heading }}
+    /> */}
       <FlatList         
         data={data}
         renderItem={({ item }) => {
@@ -132,27 +204,44 @@ const navigation =useNavigation();
         onRefresh={loadData}
         keyExtractor={(item) => `${item.id}`}
       />
-       <FAB
-      style={{  right: 20, position: 'absolute', bottom: 20, flex:1, }}
+       {/* <FAB
+      style={{  right: 20, position: 'absolute', bottom: '15%', flex:1, }}
       size="large"
       overlayColor= "#ccc"
       icon={{ name: "edit", color: "#fff" }}
-      onPress= {() => props.navigation.navigate('Create')}
+      
+    /> */}
+      <FAB
+      // style={{ width: "40%", margin: 50, marginBottom: 200 }}
+      style={{margin:50, marginBottom: 2 }}
+      placement="right"
+      color="#09899b"
+      size="large"
+      visible
+      overlayColor="#454545"
+      icon={{ name: "edit", color: "#fff" }}
+      onPress= {() => props.navigation.navigate('Create NFL')}
     />
-    </View>
+    </SafeAreaView>
   )
 }
 
 const styles = StyleSheet.create({
   background:{
     backgroundColor:'#286086'
+  }, 
+  heading: {
+    color: 'white',
+    fontSize: 22,
+    fontWeight: 'bold',
   },
   container: {
     borderBottomColor: "black",
     // borderBottomWidth: 2,
     paddingBottom:20,
     paddingTop: 13,
-    marginBottom: 10,
+    marginTop:5,
+    // marginBottom: 10,
     borderRadius: 10,
     backgroundColor: '#fff',
     marginLeft: 7.5,
@@ -165,7 +254,7 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     borderWidth: 0,
     height: 20,
-    marginTop: 5
+    // marginTop: 5
   },
   innerContainer: {
     borderColor: "green",
@@ -181,7 +270,7 @@ const styles = StyleSheet.create({
     // borderWidth: 1,
   },
   innerPhotoContainer: { 
-    height: 70, 
+    // height: 50, 
     borderColor: "black",
     // flexDirection: "row",
     // borderBottomWidth: 1,
@@ -200,24 +289,29 @@ const styles = StyleSheet.create({
 
   innerHeaderContainer: { 
     // backgroundColor: '#FFf',
-    backgroundColor: '#B6D0E2',
-    borderRadius: 10,
+     backgroundColor: '#B6D0E2',
+     borderRadius: 10,
     // alignItems:'center',
-    // borderColor: "black",
+    borderColor: "#09899b",
     // borderWidth: 1,
     // borderBottomWidth: 1,
     flexDirection:'row',
     marginLeft: 10,
     marginRight: 10,
-    // borderRightWidth: 1
+    paddingBottom: 5,
+    borderBottomWidth: 0.2,
     // borderLeftWidth: 1,
     // justifyContent: 'space-between',
+  },
+  tinyLogo: {
+    width: 100,
+    height: 40,
   },
   photo: {
     width: 50,
     height: 50,
     borderRadius: 50,
-    marginTop: 15
+     marginTop: 5
   },
   info: {
     width:'50%',
@@ -230,12 +324,14 @@ const styles = StyleSheet.create({
     borderColor: "blue",
     // borderWidth: 1,
     marginBottom: 0,
-    marginTop: 10,
+    // marginTop: 10,
     marginLeft: 10,
   },
   userName: { color: "black", fontWeight: "bold", fontSize:12, },
   userHandleAndTime: {
     color: "rgb(136, 153, 166)",
+    fontWeight: "bold",
+    //color: "#09899b",
     marginLeft: 5,
     fontStyle: 'italic',
   },
@@ -246,7 +342,7 @@ const styles = StyleSheet.create({
   tweetBodyContainer:{
     borderColor: "red", 
     // borderWidth: 1,
-    width: '70%',
+    width: '90%',
     justifyContent: 'center',
 
   },
@@ -259,6 +355,9 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     paddingBottom: 5,
     justifyContent: 'space-between',
+    borderColor: "#09899b",
+    borderTopWidth: 0.3,
+    width:"95%",
   },
   commentButton: {
     paddingLeft: 0,
@@ -307,15 +406,19 @@ const styles = StyleSheet.create({
     borderWidth: 0, 
   },
   stretch: {
-      // width: 200,
+      width:"100%",
       height: 300,
-      // resizeMode: 'stretch',
-      // maxHeight: 400,                         
-      maxWidth: '100%',
+      // height: '50%',
+      resizeMode: 'cover',
+      maxHeight: 400,                         
+      // maxWidth: '100%',
       // position: 'relative',
-      // width: width * .2,  //its same to '20%' of device width
       // aspectRatio: 1, // <-- this
       // resizeMode: 'contain', //optional
       // height: 'auto',
+      // resizeMode: 'contain',
+      // flex: 1,
+      // aspectRatio: 1,
+      // height: undefined,
     },
 })

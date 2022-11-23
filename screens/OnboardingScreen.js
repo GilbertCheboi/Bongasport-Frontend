@@ -22,7 +22,7 @@ const styles = StyleSheet.create({
     onboardingScreen: {
       justifyContent: 'center',
       alignItems: 'center',
-      backgroundColor: '#09899b',
+      backgroundColor: '#286086',
       flex: 1,
       justifyContent: 'space-around',
     //   marginBottom: 20,

@@ -10,7 +10,7 @@ import { AuthContext } from '../context/AuthContext';
 import DocumentPicker from 'react-native-document-picker';
 
 
-export default function Formula1Create(props) {
+export default function NFLCreate(props) {
 
     const [content, setContent]=  useState();
     const [image, setGame_image] = useState(null);
@@ -21,7 +21,7 @@ export default function Formula1Create(props) {
         const data = new FormData();
         data.append('content', content);
         //data.append('image', image);
-        fetch('http://gilscore.azurewebsites.net/api/Formula1/create/', {
+        fetch('http://gilscore.azurewebsites.net/api/NFL/create/', {
           method: 'POST',
           headers: {
             'Content-Type':'multipart/form-data; boundary=----WebKitFormBoundary7MA4YWxkTrZu0gW',
@@ -34,7 +34,7 @@ export default function Formula1Create(props) {
         .then(resp => resp.json())
         .then(data => { 
           console.log(data)
-          props.navigation.navigate('Formular1')
+          props.navigation.navigate('NFL Home')
         })
         .catch(error=> Alert.alert('Error', error.message))
       }
