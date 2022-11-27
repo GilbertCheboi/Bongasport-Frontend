@@ -114,27 +114,24 @@ export default function Formula1Detail(props) {
                     </View>                  
                   </View>
                   </View>
+                  <View style={styles.comment}>
                         <TextInput style={styles.input}
                     label="content"
                     // value={content}
                     mode= 'outlined'
                     multiline
-                    numberOfLines={6}
+                    placeholder="Comment"
+                    numberOfLines={3}
                     // onChangeText={text => setContent(text)}
                   /> 
-                  <Button
-                  buttonStyle={{ width: 150, alignSelf: 'center' }}
-                  containerStyle={{ margin: 5 }}
-                  disabledStyle={{
-                    borderWidth: 2,
-                    borderColor: "#00F"
-                  }}
-                  disabledTitleStyle={{ color: "#00F" }}
-                  iconContainerStyle={{ background: "#000" }}
-                  onPress={() => createComment()}
-                  title="Submit"
-                  titleStyle={{ marginHorizontal: 5 }}
-                />
+                  <TouchableOpacity style={styles.commentButton}
+                  // onPress={() => createComment()}
+                  >
+                      {/* <SimpleLineIcons name={'share'} size={16} color={'rgb(136, 153, 166)'}/> */}
+                      <MaterialCommunityIcons name="send" size={30} color={'rgb(136, 153, 166)'} />
+
+                    </TouchableOpacity>
+                </View>
                 {/* <FlatList         
                comment={comment}
                 renderItem={({ item }) => {
@@ -330,8 +327,33 @@ const styles= StyleSheet.create({
       // height: 'auto',
     },
     input:{
-      margin: 10,
-      borderColor: "red",
-      borderWidth: 2,
-    },
+      //   // margin: 10,
+      //   borderColor: "red",
+      backgroundColor: '#D3D3D3',
+      borderRadius: 15,
+      //   borderWidth: 2,
+      //   position: "absolute",
+        marginLeft: 10,
+      width: '80%',
+      //   flex: 1,
+        padding:10,
+      //   alignItems: 'center',
+      //   justifyContent: 'center',
+        marginTop: 10,
+      //   // marginBottom: 100,
+      },
+      comment:{
+        // position: 'relative',
+        // borderWidth: 2,
+        borderColor: 'red',
+        flexDirection: "row",
+        // left: 0, 
+        // right: 0,
+        // bottom: 0,
+        // height: '90%',
+      },
+      commentButton:{
+        marginTop: 30,
+        margin: 10,
+      }
 });

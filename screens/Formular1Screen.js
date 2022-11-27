@@ -53,6 +53,8 @@ export default function Formular1Screen(props) {
 
     const clickedItem = (data) => { 
       props.navigation.navigate('Detail F1',{data:data}) }
+      const clickedProfile = (data) => { 
+        props.navigation.navigate('otherprofile',{data:data}) }
 
   const renderData = (item) => {  
 
@@ -65,7 +67,7 @@ export default function Formular1Screen(props) {
               <View style={styles.innerHeaderContainer}>
                 <View style={styles.photoContainer}>
                   <View style={styles.innerPhotoContainer}>
-                    <TouchableOpacity>
+                    <TouchableOpacity onPress={ () => clickedProfile(item)}>
                     <Image
                       style={styles.photo}
                       source={{uri: item.user.image}}/>
@@ -172,10 +174,15 @@ const navigation =useNavigation();
       leftContainerStyle={{}}
       linearGradientProps={{}}
       placement="center"
-      rightComponent={{
-        icon: "person-outline",
-        color: "#fff"
-      }}
+      rightComponent={
+        <View style={styles.headerRight}>
+          <TouchableOpacity
+        style={{ marginLeft: 10 }}>
+        <Icon name= "person-outline" color="white"  onPress={()=> navigation.navigate('profile')}/>
+      </TouchableOpacity>
+          
+        </View>
+      }
       rightContainerStyle={{}}
       statusBarProps={{}}
     />
@@ -197,9 +204,13 @@ const navigation =useNavigation();
     /> */}
       <FlatList         
         data={data}
+        // windowSize={4}
+        initialNumToRender={10}
+        maxToRenderPerBatch={5}
         renderItem={({ item }) => {
             return renderData(item)
         }}
+        pagingEnabled
         refreshing={loading}
         onRefresh={loadData}
         keyExtractor={(item) => `${item.id}`}
@@ -213,7 +224,7 @@ const navigation =useNavigation();
     /> */}
       <FAB
       // style={{ width: "40%", margin: 50, marginBottom: 200 }}
-      style={{margin:50, marginBottom: 2 }}
+      style={{ width: "10%", margin: 50, marginBottom: "25%" }}
       placement="right"
       color="#09899b"
       size="large"
@@ -283,7 +294,7 @@ const styles = StyleSheet.create({
     // flexDirection: "row", 
     // borderBottomWidth: 1,
     // alignItems: "center",
-    left: 60,
+    left: '70%',
     // borderLeftWidth: 1
   },
 

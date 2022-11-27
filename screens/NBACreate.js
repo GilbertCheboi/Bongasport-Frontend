@@ -20,7 +20,7 @@ export default function NBACreate(props) {
     const createLoad =() => {
         const data = new FormData();
         data.append('content', content);
-        //data.append('image', image);
+        // data.append('image', image);
         fetch('http://gilscore.azurewebsites.net/api/NBA/create/', {
           method: 'POST',
           headers: {

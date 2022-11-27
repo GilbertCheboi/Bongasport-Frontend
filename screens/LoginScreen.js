@@ -35,7 +35,7 @@ export default function LoginScreen() {
       <MaterialCommunityIcons name="at" size={20} />
         <TextInput
           style={styles.TextInput}
-          placeholder="email."
+          placeholder="Username."
           keyboardType="email-address"
           placeholderTextColor="#333"
           value={username}

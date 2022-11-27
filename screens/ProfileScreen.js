@@ -15,7 +15,7 @@ export default function ProfileScreen() {
   const {userInfo} = useContext(AuthContext);
   const username = userInfo.user.username
   const loadData = () => {
-    fetch('http://gilscore.azurewebsites.net/api/profiles/Gilly/',{
+    fetch(`http://gilscore.azurewebsites.net/api/profiles/${username}/`,{
      method: 'GET',
      headers:{
       'Authorization': 'Token ' + userToken
@@ -48,20 +48,25 @@ export default function ProfileScreen() {
         source={{ uri:data.image}}
         containerStyle={styles.avatar}
       />
+      <TouchableOpacity 
+      style={styles.edit_button}
+      // onPress={ () => navigation.navigate('Edit')}
+      >
+      
+      <Text style={styles.edit_txt_button}>Edit Profile</Text>
+    </TouchableOpacity>
       <View style={styles.profileInfo}>
         <Text style={styles.username}>{data.email}</Text>
         <Text style={styles.username}>@{username}</Text>
         <Text style={styles.bio}>{data.bio}</Text>
-        <Text style={styles.bio}>{data.follower_count}</Text>
-        <Text style={styles.bio}>{data.following_count} </Text>
-       
+        <Text style={styles.followers}>
+          <MaterialCommunityIcons name="map-marker" size={20} color={'#09899b'} />  {data.location}
+          </Text>
+        <Text style={styles.followers}>Followers   {data.follower_count}</Text>
+        <Text style={styles.follow}>Following   {data.following_count} </Text>
         
       </View>
-      <TouchableOpacity 
-      onPress={ () => navigation.navigate('Edit')}>
       
-      <Text style={styles.edit_button}>Edit Profile</Text>
-    </TouchableOpacity>
     {/* <TouchableOpacity
         style={styles.button}
         onPress ={ () => navigation.navigate('not')}
@@ -94,13 +99,15 @@ const styles = StyleSheet.create({
     },
     profileInfo: {
       marginLeft: 10,
-      marginTop: 10,
-      marginBottom: 10,
+      // marginTop: 10,
+      marginBottom: 5,
     },
     bio: {
+      fontSize: 16,
+      fontWeight: "400",
       marginTop: 10,
       marginBottom: 10,
-      marginRight: 100,
+      marginRight: 10,
     },
     name: {
       fontSize: 20,
@@ -108,22 +115,42 @@ const styles = StyleSheet.create({
       lineHeight: 21,
     },
     username: {
+      fontSize: 20,
+      fontWeight: "900",
       color: "#657786",
     },
     location: {
       color: "#657786",
+      fontSize: 16,
+      fontWeight: "500",
     },
     regDate: {
       color: "#657786",
     },
     follow: {
       fontSize: 16,
+      marginBottom: 15,
     },
     followers: {
       marginRight: 10,
+      fontSize: 16,
+      // fontWeight: "600",
+      marginBottom: 5,
     },
     edit_button: {
-        backgroundColor: 'red',
+        backgroundColor: '#286086',
+        width: "30%",
+        borderRadius: 15,
+        height: 40,
+        color: '#fff',
+        alignItems: "center",
+        justifyContent: "center",
+        marginTop: 0,
+        marginLeft: "60%",
+    },
+    edit_txt_button:{
+      color: '#fff',
+      fontWeight: "900",
     },
   });
 

@@ -33,12 +33,12 @@ export default function TabNavigator() {
             <MaterialCommunityIcons name="bell" color={color} size={26} />
           ),
         }} />
-        <Tab.Screen name="Profile" component={ProfileScreen} options={{
+        {/* <Tab.Screen name="Profile" component={ProfileScreen} options={{
           tabBarLabel: 'Profile',
           tabBarIcon: ({ color }) => (
             <MaterialCommunityIcons name="account" color={color} size={26} />
           ),
-        }}/>
+        }}/> */}
       </Tab.Navigator>
   )
 }

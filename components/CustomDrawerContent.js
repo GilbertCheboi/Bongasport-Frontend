@@ -18,7 +18,7 @@ export default function CustomDrawerContent(props) {
     const {userInfo} = useContext(AuthContext);
     const username = userInfo.user.username
   const loadData = () => {
-    fetch('http://gilscore.azurewebsites.net/api/profiles/Gilly/',{
+    fetch(`http://gilscore.azurewebsites.net/api/profiles/${username}/`,{
      method: 'GET',
      headers:{
       'Authorization': 'Token ' + userToken
@@ -27,7 +27,7 @@ export default function CustomDrawerContent(props) {
 
     .then(resp => resp.json())
     .then(data => {
-       console.log(data)
+      //  console.log(data)
        setData(data)
        setLoading(false)
     })

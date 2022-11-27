@@ -28,7 +28,7 @@ export default function FootballScreen(props) {
         setData(data.results)
         setLoading(false)
      })
-     .catch(error => Alert.alert('Error', error.message))
+     .catch(error => Alert.alert('Error'))
    }
 
    const likeAction =() => {
@@ -53,6 +53,8 @@ export default function FootballScreen(props) {
 
     const clickedItem = (data) => { 
       props.navigation.navigate('Detail Football',{data:data}) }
+      const clickedProfile = (data) => { 
+        props.navigation.navigate('otherprofile',{data:data}) }
 
   const renderData = (item) => {  
 
@@ -65,7 +67,7 @@ export default function FootballScreen(props) {
               <View style={styles.innerHeaderContainer}>
                 <View style={styles.photoContainer}>
                   <View style={styles.innerPhotoContainer}>
-                    <TouchableOpacity>
+                    <TouchableOpacity onPress={ () => clickedProfile(item)}>
                     <Image
                       style={styles.photo}
                       source={{uri: item.user.image}}/>
@@ -150,32 +152,42 @@ const navigation =useNavigation();
       backgroundImageStyle={{}}
       barStyle="default"
       centerComponent={
-        <Image
-        style={styles.tinyLogo}
-        source={require('../assets/f1.jpg')}
-      />
-      // {
-        // text: "Formula 1",
-        // style: { color: "#fff",  fontSize: 22,
-        // fontWeight: 'bold', }
+      //   <Image
+      //   style={styles.tinyLogo}
+      //   source={require('../assets/f1.jpg')}
+      // />
+      {
+        text: "Football",
+        style: { color: "#fff",  fontSize: 22,
+        fontWeight: 'bold', }
       }
-    // }
+    }
       centerContainerStyle={{}}
       // containerStyle={{ width: 350 }}
-      leftComponent={ <View style={styles.headerRight}>
+      leftComponent={ 
+      <View style={styles.headerRight}>
       <TouchableOpacity
-        style={{ marginLeft: 10 }}>
-        <Icon name= "menu" color="white"  onPress={()=> navigation.openDrawer()}/>
-      </TouchableOpacity>
+            style={{ marginLeft: 10 }}>
+            <Icon name= "menu" color="white"  onPress={()=> navigation.openDrawer()}/>
+          </TouchableOpacity>
     </View>}
     // { icon: "menu", color: "#fff" }}
       leftContainerStyle={{}}
       linearGradientProps={{}}
       placement="center"
-      rightComponent={{
-        icon: "person-outline",
-        color: "#fff"
-      }}
+      rightComponent={
+        <View style={styles.headerRight}>
+          <TouchableOpacity
+        style={{ marginLeft: 10 }}>
+        <Icon name= "person-outline" color="white"  onPress={()=> navigation.navigate('profile')}/>
+      </TouchableOpacity>
+          
+        </View>
+    }
+      // rightComponent={{
+      //   icon: "person-outline",
+      //   color: "#fff"
+      // }}
       rightContainerStyle={{}}
       statusBarProps={{}}
     />
@@ -212,8 +224,8 @@ const navigation =useNavigation();
       
     /> */}
       <FAB
-      // style={{ width: "40%", margin: 50, marginBottom: 200 }}
-      style={{margin:50, marginBottom: 2 }}
+      style={{ width: "10%", margin: 50, marginBottom: "25%" }}
+      // style={{margin:50, marginBottom: 2 }}
       placement="right"
       color="#09899b"
       size="large"
@@ -283,7 +295,7 @@ const styles = StyleSheet.create({
     // flexDirection: "row", 
     // borderBottomWidth: 1,
     // alignItems: "center",
-    left: 60,
+    left: '80%',
     // borderLeftWidth: 1
   },
 

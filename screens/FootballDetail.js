@@ -36,7 +36,7 @@ export default function FootballDetail(props) {
   //   })
   // }
   return (
-    <View >
+    <ScrollView >
       <View style={styles.background}>
           <View style={styles.container}>
             <View style={styles.innerContainer}>
@@ -114,17 +114,39 @@ export default function FootballDetail(props) {
             </View>
           </View>
           </View>
-          <TextInput style={styles.input}
+          <View style={styles.comment}>
+                        <TextInput style={styles.input}
                     label="content"
                     // value={content}
                     mode= 'outlined'
                     multiline
-                    numberOfLines={2}
-                    placeholder= "Reply"
+                    placeholder="Comment"
+                    numberOfLines={3}
                     // onChangeText={text => setContent(text)}
                   /> 
+                  <TouchableOpacity style={styles.commentButton}
+                  // onPress={() => createComment()}
+                  >
+                      {/* <SimpleLineIcons name={'share'} size={16} color={'rgb(136, 153, 166)'}/> */}
+                      <MaterialCommunityIcons name="send" size={30} color={'rgb(136, 153, 166)'} />
+
+                    </TouchableOpacity>
+                  {/* <Button
+                  buttonStyle={{ width: 50, alignSelf: 'center' }}
+                  containerStyle={{ margin: 5 }}
+                  disabledStyle={{
+                    borderWidth: 2,
+                    borderColor: "#00F"
+                  }}
+                  disabledTitleStyle={{ color: "#00F" }}
+                  iconContainerStyle={{ background: "#286086" }}
+                  onPress={() => createComment()}
+                  title="Submit"
+                  titleStyle={{ marginHorizontal: 5 }} */}
+                {/* /> */}
+                </View>
       
-    </View>
+    </ScrollView>
     )
 }
 
@@ -132,7 +154,7 @@ export default function FootballDetail(props) {
 
 const styles = StyleSheet.create({
   background:{
-    backgroundColor: "#09899b",
+    backgroundColor: '#286086',
   }, 
   heading: {
     color: 'white',
@@ -171,7 +193,24 @@ const styles = StyleSheet.create({
     borderColor: "yellow",
     flexDirection: "column",
     marginLeft: 10,
+    marginBottom: 10,
+    marginTop: 10,
     // borderWidth: 1,
+  },
+  innerHeaderContainer: { 
+    // backgroundColor: '#FFf',
+    backgroundColor: '#B6D0E2',
+    borderRadius: 10,
+    // alignItems:'center',
+    // borderColor: "black",
+    // borderWidth: 1,
+    // borderBottomWidth: 1,
+    flexDirection:'row',
+    marginLeft: 10,
+    marginRight: 10,
+    // borderRightWidth: 1
+    // borderLeftWidth: 1,
+    // justifyContent: 'space-between',
   },
   innerPhotoContainer: { 
     // height: 50, 
@@ -188,25 +227,27 @@ const styles = StyleSheet.create({
     // borderBottomWidth: 1,
     // alignItems: "center",
     left: 60,
+    marginBottom: 10,
+    marginTop: 10,
     // borderLeftWidth: 1
   },
 
-  innerHeaderContainer: { 
-    // backgroundColor: '#FFf',
-    // backgroundColor: '#B6D0E2',
-    // borderRadius: 10,
-    // alignItems:'center',
-    borderColor: "#09899b",
-    // borderWidth: 1,
-    // borderBottomWidth: 1,
-    flexDirection:'row',
-    marginLeft: 10,
-    marginRight: 10,
-    paddingBottom: 5,
-    borderBottomWidth: 0.2,
-    // borderLeftWidth: 1,
-    // justifyContent: 'space-between',
-  },
+  // innerHeaderContainer: { 
+  //   // backgroundColor: '#FFf',
+  //   // backgroundColor: '#B6D0E2',
+  //   // borderRadius: 10,
+  //   // alignItems:'center',
+  //   borderColor: "#09899b",
+  //   // borderWidth: 1,
+  //   // borderBottomWidth: 1,
+  //   flexDirection:'row',
+  //   marginLeft: 10,
+  //   marginRight: 10,
+  //   paddingBottom: 5,
+  //   borderBottomWidth: 0.2,
+  //   // borderLeftWidth: 1,
+  //   // justifyContent: 'space-between',
+  // },
   photo: {
     width: 50,
     height: 50,
@@ -324,16 +365,33 @@ const styles = StyleSheet.create({
       // height: undefined,
     },
     input:{
-      // margin: 10,
-      borderColor: "red",
-      borderWidth: 2,
-      position: "absolute",
-      margin: 0,
-      flex: 1,
+    //   // margin: 10,
+    //   borderColor: "red",
+    backgroundColor: '#D3D3D3',
+    borderRadius: 15,
+    //   borderWidth: 2,
+    //   position: "absolute",
+      marginLeft: 10,
+    width: '80%',
+    //   flex: 1,
       padding:10,
-      alignItems: 'center',
-      justifyContent: 'center',
-      // marginTop: "90%",
-      // marginBottom: 100,
+    //   alignItems: 'center',
+    //   justifyContent: 'center',
+      marginTop: 10,
+    //   // marginBottom: 100,
     },
+    comment:{
+      // position: 'relative',
+      // borderWidth: 2,
+      borderColor: 'red',
+      flexDirection: "row",
+      // left: 0, 
+      // right: 0,
+      // bottom: 0,
+      // height: '90%',
+    },
+    commentButton:{
+      marginTop: 30,
+      margin: 10,
+    }
 })

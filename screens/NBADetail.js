@@ -1,13 +1,131 @@
-import { Text,FlatList,TextInput, Button, View, StyleSheet,TouchableOpacity, TouchableHighlight, Image, ScrollView } from 'react-native'
-import React, { Component, useState,useEffect } from 'react'
+import { View, Text, FlatList, TextInput, Dimensions,SafeAreaView, Alert, Image, Button, StyleSheet, TouchableOpacity, TouchableHighlight, ScrollView } from 'react-native'
+import React, { useEffect, useState, useContext } from 'react'
+import { FAB } from "@rneui/base";
+import { Card } from 'react-native-paper';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
+import { useNavigation } from '@react-navigation/native';
+import { Header, Icon } from "@rneui/base";
+// import { Header  as HeaderRNE, HeaderProps, Icon  } from "@rneui/themed";
+import { AuthContext } from '../context/AuthContext';
 
 
 export default function NBADetail(props) {
-  const data = props.route.params.data;
+  const dataa = props.route.params.data;
+  const [data, setData] = useState([]) 
+  const [loading, setLoading] = useState(true)
   const [liked, setLiked] = useState(false);
   const [comment, setComment] = useState([]) 
+  const {userToken, userInfo} = useContext(AuthContext);
 
+
+  const loadData = () => { 
+    fetch('http://gilscore.azurewebsites.net/api/NBA/feed/', {
+      method: 'GET',
+      headers:{
+        'Authorization': 'Token ' + userToken
+      }
+     }) 
+     .then(resp => resp.json())
+     .then(data => {
+      console.log(data)
+        setData(data.results)
+        // console.log(data.results)
+        setLoading(false)
+     })
+     .catch(error => Alert.alert('Error', error.message))
+   }
+
+    useEffect(() => {
+     loadData();
+    }, [])  
+
+
+    const renderDataa = (item) => {  
+
+      return(
+          <Card        onPress= {() => clickedItem(item)} >
+                         
+            <View style={styles.background}>
+            <View style={styles.container}>
+              <View style={styles.innerContainer}>
+                <View style={styles.innerHeaderContainer}>
+                  <View style={styles.photoContainer}>
+                    <View style={styles.innerPhotoContainer}>
+                      <TouchableOpacity onPress={ () => clickedProfile(item)}>
+                      <Image
+                        style={styles.photo}
+                        source={{uri: item.user.image}}/>
+                      </TouchableOpacity>
+                    </View>
+                  </View>              
+                  <View style={styles.info}>
+                    <View style={styles.userDetails}>
+                      <Text style={styles.userName}>{item.user.first_name}
+                        <Text style={styles.userHandleAndTime}>  @{item.user.username} {item.timestamp}   {}</Text>
+                        
+                      </Text>
+                    </View>
+                  </View>
+                  <View style={styles.innerClubContainer}>
+                      <TouchableOpacity>
+                      <Image
+                        style={styles.photo}
+                        source={{uri: item.user.NBA}}/>
+                      </TouchableOpacity>
+                  </View> 
+                  
+                </View>
+                <View style={styles.BodyContainer}>
+                <View style={styles.tweetBodyContainer}>
+                  <View style={styles.tweetTextContainer}>
+                    <Text style={styles.tweetText}> {item.content}</Text>
+                  </View>
+                  <View>
+                  {item.image !== null ? <Image
+                      style={styles.stretch}
+                      source={{uri: item.image}}
+                      /> : <Image
+                      style={{height: "auto"}}
+                      source={{uri: item.image}}
+                      />}
+                  </View>
+                  <View>
+                    <View style={styles.tweetActionsContainer}>
+                      <TouchableOpacity style={styles.commentButton}>
+                        <MaterialCommunityIcons name="reply" style={styles.commentButtonIcon} size={20} color={'#09899b'} />
+                        <Text style={styles.commentsCount}>4</Text>
+                      </TouchableOpacity>
+                      <TouchableOpacity  style={styles.retweetButton}>
+                        {/* <EvilIcons name={'retweet'} size={25} color={(retweeted) ? "rgb(23, 191, 99)":'rgb(136, 153, 166)'}/> */}
+                        <MaterialCommunityIcons name="repeat" size={20} color={'#09899b'} />
+                        <Text style={[styles.retweetButtonIcon, {color:"#09899b",fontWeight:"bold"}]}></Text>
+                      </TouchableOpacity>
+                      <TouchableOpacity style={styles.likeButton} onPress={() => likeAction()}>
+                      <MaterialCommunityIcons
+                        name={liked ? "heart" : "heart-outline"}
+                        size={20}
+                        color={liked ? "red" : "black"}
+                      />
+                        <Text style={[styles.likeButtonIcon, {color:"rgb(136, 153, 166)",fontWeight: "bold" }]}>{item.likes}</Text>
+                      </TouchableOpacity>
+                      <TouchableOpacity style={styles.shareButton}>
+                        {/* <SimpleLineIcons name={'share'} size={16} color={'rgb(136, 153, 166)'}/> */}
+                        <MaterialCommunityIcons name="share-variant" size={16} color={'#09899b'} />
+  
+                      </TouchableOpacity>
+                    </View>
+                  </View>                  
+                </View>
+                </View>
+             
+              </View>
+            </View>
+            </View>
+              
+          </Card>
+      )
+  }
+  
 
   // const loadComment = () => { 
   //   fetch('http://192.168.25.107:8000/api/Baseball/commentfeed/', {
@@ -54,14 +172,14 @@ export default function NBADetail(props) {
                         <TouchableOpacity>
                         <Image
                           style={styles.photo}
-                          source={{uri: data.user.image}}/>
+                          source={{uri: dataa.user.image}}/>
                         </TouchableOpacity>
                       </View>
                     </View>              
                     <View style={styles.info}>
                       <View style={styles.userDetails}>
-                        <Text style={styles.userName}>{data.user.first_name}
-                          <Text style={styles.userHandleAndTime}>  @{data.user.username} ·{data.timestamp}   :{}</Text>
+                        <Text style={styles.userName}>{dataa.user.first_name}
+                          <Text style={styles.userHandleAndTime}>  @{dataa.user.username} ·{dataa.timestamp}   :{}</Text>
                           <Text>IEBC</Text>
                         </Text>
                       </View>
@@ -70,7 +188,7 @@ export default function NBADetail(props) {
                         <TouchableOpacity>
                         <Image
                           style={styles.photo}
-                          source={{uri: data.user.NBA}}/>
+                          source={{uri: dataa.user.NBA}}/>
                         </TouchableOpacity>
                     </View> 
                     
@@ -78,12 +196,12 @@ export default function NBADetail(props) {
                   <View style={styles.BodyContainer}>
                   <View style={styles.tweetBodyContainer}>
                     <View style={styles.tweetTextContainer}>
-                      <Text style={styles.tweetText}> {data.content}</Text>
+                      <Text style={styles.tweetText}> {dataa.content}</Text>
                     </View>
                     <View>
                       <Image
                         style={styles.stretch}
-                        source={{uri: data.image}}
+                        source={{uri: dataa.image}}
                         />
                     </View>
                     <View>
@@ -103,7 +221,7 @@ export default function NBADetail(props) {
                           size={20}
                           color={liked ? "red" : "black"}
                         />
-                          <Text style={[styles.likeButtonIcon, {color:"rgb(136, 153, 166)",fontWeight: "bold" }]}>{data.likes}</Text>
+                          <Text style={[styles.likeButtonIcon, {color:"rgb(136, 153, 166)",fontWeight: "bold" }]}>{dataa.likes}</Text>
                         </TouchableOpacity>
                         <TouchableOpacity style={styles.shareButton}>
                           {/* <SimpleLineIcons name={'share'} size={16} color={'rgb(136, 153, 166)'}/> */}
@@ -114,36 +232,33 @@ export default function NBADetail(props) {
                     </View>                  
                   </View>
                   </View>
+                  <View style={styles.comment}>
                         <TextInput style={styles.input}
                     label="content"
                     // value={content}
                     mode= 'outlined'
                     multiline
-                    numberOfLines={6}
+                    placeholder="Comment"
+                    numberOfLines={3}
                     // onChangeText={text => setContent(text)}
                   /> 
-                  <Button
-                  buttonStyle={{ width: 150, alignSelf: 'center' }}
-                  containerStyle={{ margin: 5 }}
-                  disabledStyle={{
-                    borderWidth: 2,
-                    borderColor: "#00F"
-                  }}
-                  disabledTitleStyle={{ color: "#00F" }}
-                  iconContainerStyle={{ background: "#000" }}
-                  onPress={() => createComment()}
-                  title="Submit"
-                  titleStyle={{ marginHorizontal: 5 }}
-                />
-                {/* <FlatList         
-               comment={comment}
+                  <TouchableOpacity style={styles.commentButton}
+                  // onPress={() => createComment()}
+                  >
+                      {/* <SimpleLineIcons name={'share'} size={16} color={'rgb(136, 153, 166)'}/> */}
+                      <MaterialCommunityIcons name="send" size={30} color={'rgb(136, 153, 166)'} />
+
+                    </TouchableOpacity>
+                </View>
+                <FlatList         
+               data={data}
                 renderItem={({ item }) => {
-                    return renderData(item)
+                    return renderDataa(item)
                 }}
                 // refreshing={loading}
                 // onRefresh={loadData}
                 keyExtractor={(item) => `${item.id}`}
-              /> */}
+              />
                 
                 </View>
               </ScrollView>
@@ -330,8 +445,33 @@ const styles= StyleSheet.create({
       // height: 'auto',
     },
     input:{
-      margin: 10,
-      borderColor: "red",
-      borderWidth: 2,
-    },
+      //   // margin: 10,
+      //   borderColor: "red",
+      backgroundColor: '#D3D3D3',
+      borderRadius: 15,
+      //   borderWidth: 2,
+      //   position: "absolute",
+        marginLeft: 10,
+      width: '80%',
+      //   flex: 1,
+        padding:10,
+      //   alignItems: 'center',
+      //   justifyContent: 'center',
+        marginTop: 10,
+      //   // marginBottom: 100,
+      },
+      comment:{
+        // position: 'relative',
+        // borderWidth: 2,
+        borderColor: 'red',
+        flexDirection: "row",
+        // left: 0, 
+        // right: 0,
+        // bottom: 0,
+        // height: '90%',
+      },
+      commentButton:{
+        marginTop: 30,
+        margin: 10,
+      }
 });

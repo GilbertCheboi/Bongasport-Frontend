@@ -1,23 +1,40 @@
-import { View, Text, FlatList, Dimensions,SafeAreaView, Alert, Image, StyleSheet, TouchableOpacity, TouchableHighlight, ScrollView } from 'react-native'
+import { Avatar, Divider } from "react-native-elements";
+import { MaterialCommunityIcons } from '@expo/vector-icons';
+import { useNavigation } from "@react-navigation/native";
+import { AuthContext } from '../context/AuthContext';
+import { View, Text, FlatList, Dimensions,SafeAreaView, Alert, Image, StyleSheet, TouchableOpacity, ScrollView } from 'react-native'
 import React, { useEffect, useState, useContext } from 'react'
 import { FAB } from "@rneui/base";
 import { Card } from 'react-native-paper';
-import { MaterialCommunityIcons } from '@expo/vector-icons';
-import { useNavigation } from '@react-navigation/native';
-import { Header, Icon } from "@rneui/base";
-// import { Header  as HeaderRNE, HeaderProps, Icon  } from "@rneui/themed";
-import { AuthContext } from '../context/AuthContext';
+export default function OthersProfileScreen(props) {
 
+  const userdata = props.route.params.data;
 
-export default function BaseballScreen(props) {
+  const [data, setData] = useState([])
+  const {userToken} = useContext(AuthContext)
+  const [userName, setUserName] = useState()
+  const {userInfo} = useContext(AuthContext);
+  const username = userdata.user.username
+  // console.log(userdata)
+  // const loadData = () => {
+  //   fetch(`http://gilscore.azurewebsites.net/api/profiles/${username}/`,{
+  //    method: 'GET',
+  //    headers:{
+  //     'Authorization': 'Token ' + userToken
+  //    }
+  //   })
 
-  const [data, setData] = useState([]) 
-  const [loading, setLoading] = useState(true)
-  const [liked, setLiked] = useState(false);
-  const {userToken, userInfo} = useContext(AuthContext);
+  //   .then(resp => resp.json())
+  //   .then(data => {
+  //     //  console.log(data)
+  //      setData(data)
+  //     //  setLoading(false)
+  //   })
+  //   .catch(error => Alert.alert('Error', error.message))
+  // }
 
-  const loadData = () => { 
-    fetch('http://gilscore.azurewebsites.net/api/Baseball/feed/', {
+  const loadDataProfile = () => { 
+    fetch('http://gilscore.azurewebsites.net/api/Formula1/feed/', {
       method: 'GET',
       headers:{
         'Authorization': 'Token ' + userToken
@@ -26,36 +43,21 @@ export default function BaseballScreen(props) {
      .then(resp => resp.json())
      .then(data => {
         setData(data.results)
-        setLoading(false)
+        setUserName(data.results)
+        // console.log(data.result)
+        // setLoading(false)
      })
      .catch(error => Alert.alert('Error', error.message))
    }
 
-   const likeAction =() => {
-    fetch('http://gilscore.azurewebsites.net/api/Baseball/action/', {
-      method: 'POST',
-      headers: {
-        'Content-Type':'application/json'
-      },
-        body: JSON.stringify(data)
-    })
-    // .then(resp => resp.json())
-    // .then(data => { 
-    //   console.log(data)
-    //   props.navigation.navigate('Formular1')
-    // })
-    // .catch(error=> Alert.alert('Error', error.message))
-  }
- 
-  useEffect(() => {
-     loadData();
-    }, [])  
+  // useEffect(() =>{
+  //   loadData();
+  //  }, [])
+  useEffect(() =>{
+    loadDataProfile();
+   }, [])
 
-    const clickedItem = (data) => { 
-      props.navigation.navigate('Detail Baseball',{data:data}) }
-      const clickedProfile = (data) => { 
-        props.navigation.navigate('otherprofile',{data:data}) }
-
+   
   const renderData = (item) => {  
 
     return(
@@ -67,7 +69,7 @@ export default function BaseballScreen(props) {
               <View style={styles.innerHeaderContainer}>
                 <View style={styles.photoContainer}>
                   <View style={styles.innerPhotoContainer}>
-                    <TouchableOpacity onPress={ () => clickedProfile(item)}>
+                    <TouchableOpacity>
                     <Image
                       style={styles.photo}
                       source={{uri: item.user.image}}/>
@@ -86,7 +88,7 @@ export default function BaseballScreen(props) {
                     <TouchableOpacity>
                     <Image
                       style={styles.photo}
-                      source={{uri: item.user.Baseball}}/>
+                      source={{uri: item.user.Formula1}}/>
                     </TouchableOpacity>
                 </View> 
                 
@@ -118,9 +120,9 @@ export default function BaseballScreen(props) {
                     </TouchableOpacity>
                     <TouchableOpacity style={styles.likeButton} onPress={() => likeAction()}>
                     <MaterialCommunityIcons
-                      name={liked ? "heart" : "heart-outline"}
-                      size={20}
-                      color={liked ? "red" : "black"}
+                      // name={liked ? "heart" : "heart-outline"}
+                      // size={20}
+                      // color={liked ? "red" : "black"}
                     />
                       <Text style={[styles.likeButtonIcon, {color:"rgb(136, 153, 166)",fontWeight: "bold" }]}>{item.likes}</Text>
                     </TouchableOpacity>
@@ -142,101 +144,140 @@ export default function BaseballScreen(props) {
     )
 }
 
-const navigation =useNavigation();
-
- 
-  return (
+  const navigation = useNavigation();
+   return (
     <SafeAreaView>
-      <Header
-      backgroundColor="#286086"
-      backgroundImageStyle={{}}
-      barStyle="default"
-      centerComponent={
-      //   <Image
-      //   style={styles.tinyLogo}
-      //   source={require('../assets/f1.jpg')}
-      // />
-      {
-        text: "Baseball",
-        style: { color: "#fff",  fontSize: 22,
-        fontWeight: 'bold', }
-      }
-    }
-      centerContainerStyle={{}}
-      // containerStyle={{ width: 350 }}
-      leftComponent={ <View style={styles.headerRight}>
-      <TouchableOpacity
-        style={{ marginLeft: 10 }}>
-        <Icon name= "menu" color="white"  onPress={()=> navigation.openDrawer()}/>
-      </TouchableOpacity>
-    </View>}
-    // { icon: "menu", color: "#fff" }}
-      leftContainerStyle={{}}
-      linearGradientProps={{}}
-      placement="center"
-      rightComponent={
-        <View style={styles.headerRight}>
-          <TouchableOpacity
-        style={{ marginLeft: 10 }}>
-        <Icon name= "person-outline" color="white"  onPress={()=> navigation.navigate('profile')}/>
-      </TouchableOpacity>
-          
-        </View>
-      }
-      rightContainerStyle={{}}
-      statusBarProps={{}}
-    />
-      {/* <HeaderRNE
-      statusB
-      leftComponent={{
-        icon: 'menu',
-        color: '#fff',
-      }}
-      rightComponent={
-          <View style={styles.headerRight}>
-            <TouchableOpacity
-              style={{ marginLeft: 10 }}>
-              <icon:"menu" color="white"  onPress={()=> navigation.openDrawer()}/>
-            </TouchableOpacity>
-          </View>
-      }
-      centerComponent={{ text: 'Formula 1', style: styles.heading }}
-    /> */}
+      <ScrollView>
+      <Image
+        source={{ uri: "https://www.clactonandfrintongazette.co.uk/resources/images/16030527/?type=responsive-gallery-fullscreen"}}
+        style={styles.cover}
+      />
+      <Avatar
+        rounded
+        size="large"
+        source={{ uri:userdata.user.image}}
+        containerStyle={styles.avatar}
+      />
+      <TouchableOpacity 
+      style={styles.edit_button}
+      // onPress={ () => navigation.navigate('')}
+      >
+      
+      <Text style={styles.edit_txt_button}>Follow</Text>
+    </TouchableOpacity>
+      <View style={styles.profileInfo}>
+        <Text style={styles.username}>{userdata.user.email}</Text>
+        <Text style={styles.username}>@{userdata.user.username}</Text>
+        <Text style={styles.bio}>{userdata.user.bio}</Text>
+        <Text style={styles.followers}>
+          <MaterialCommunityIcons name="map-marker" size={20} color={'#09899b'} />  {userdata.user.location}</Text>
+        <Text style={styles.followers}>Followers   {userdata.user.follower_count}</Text>
+        <Text style={styles.follow}>Following   {userdata.user.following_count} </Text>
+       
+        
+      </View>
+      
+    {/* <TouchableOpacity
+        style={styles.button}
+        onPress ={ () => navigation.navigate('not')}
+      >
+        <Text>Get started with CallCenterAfrica</Text>
+      </TouchableOpacity> */}
+      <Divider />
       <FlatList         
         data={data}
+        // windowSize={4}
+        initialNumToRender={10}
+        maxToRenderPerBatch={5}
         renderItem={({ item }) => {
             return renderData(item)
         }}
-        refreshing={loading}
-        onRefresh={loadData}
+        pagingEnabled
+        // refreshing={loading}
+        // onRefresh={loadData}
         keyExtractor={(item) => `${item.id}`}
       />
-       {/* <FAB
-      style={{  right: 20, position: 'absolute', bottom: '15%', flex:1, }}
-      size="large"
-      overlayColor= "#ccc"
-      icon={{ name: "edit", color: "#fff" }}
-      
-    /> */}
-      <FAB
-      // style={{ width: "40%", margin: 50, marginBottom: 200 }}
-      style={{ width: "10%", margin: 50, marginBottom: "25%" }}
-      placement="right"
-      color="#09899b"
-      size="large"
-      visible
-      overlayColor="#454545"
-      icon={{ name: "edit", color: "#fff" }}
-      onPress= {() => props.navigation.navigate('Create Baseball')}
-    />
+      </ScrollView>
     </SafeAreaView>
+
   )
-}
+  
+  }
+
+
+
+
 
 const styles = StyleSheet.create({
-    background:{
-      backgroundColor:'#286086'
-    }, 
+    container: {},
+    cover: {
+      width: "100%",
+      height: 140,
+      marginTop:20
+    },
+    avatar: {
+      marginLeft: 20,
+      marginTop: -40,
+      borderWidth: 3,
+      borderColor: "white",
+      borderStyle: "solid",
+    },
+    profileInfo: {
+      marginLeft: 10,
+      // marginTop: 10,
+      marginBottom: 5,
+    },
+    bio: {
+      fontSize: 16,
+      fontWeight: "400",
+      marginTop: 10,
+      marginBottom: 10,
+      marginRight: 10,
+    },
+    name: {
+      fontSize: 20,
+      fontWeight: "900",
+      lineHeight: 21,
+    },
+    username: {
+      fontSize: 20,
+      fontWeight: "900",
+      color: "#657786",
+    },
+    location: {
+      color: "#657786",
+      fontSize: 16,
+      fontWeight: "500",
+    },
+    regDate: {
+      color: "#657786",
+    },
+    follow: {
+      fontSize: 16,
+      // fontWeight: "600",
+      marginBottom: 15,
+
+    },
+    followers: {
+      marginRight: 10,
+      fontSize: 16,
+      // fontWeight: "600",
+      marginBottom: 5,
+    },
+    edit_txt_button:{
+      color: '#fff',
+      fontWeight: "900",
+    },
+    edit_button: {
+        backgroundColor: '#286086',
+        width: "30%",
+        borderRadius: 15,
+        height: 30,
+        alignItems: "center",
+        justifyContent: "center",
+        marginTop: -20,
+        marginLeft: "60%",
+    },
     heading: {
       color: 'white',
       fontSize: 22,
@@ -296,7 +337,7 @@ const styles = StyleSheet.create({
   
     innerHeaderContainer: { 
       // backgroundColor: '#FFf',
-       backgroundColor: '#286086',
+       backgroundColor: '#B6D0E2',
        borderRadius: 10,
       // alignItems:'center',
       borderColor: "#09899b",
@@ -349,7 +390,7 @@ const styles = StyleSheet.create({
     tweetBodyContainer:{
       borderColor: "red", 
       // borderWidth: 1,
-      width: '70%',
+      width: '90%',
       justifyContent: 'center',
   
     },
@@ -428,4 +469,9 @@ const styles = StyleSheet.create({
         // aspectRatio: 1,
         // height: undefined,
       },
-  })
+  });
+
+
+
+
+

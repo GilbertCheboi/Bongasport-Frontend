@@ -8,8 +8,8 @@ export default function ProfileStack() {
     const Stack = createNativeStackNavigator();
   return (
     <Stack.Navigator>
-        <Stack.Screen name="Profile home" component={ProfileScreen} options={{ headerShown: false }}/>
-        <Stack.Screen name="Edit" component={EditProfile} options={{ headerShown: false }}/>
+        {/* <Stack.Screen name="Profile" component={ProfileScreen} options={{ headerShown: false }}/>
+        <Stack.Screen name="Edit" component={EditProfile} options={{ headerShown: false }}/> */}
       </Stack.Navigator>
   )
 }

@@ -23,7 +23,7 @@ export default function DrawerNavigator() {
       <Drawer.Screen name="Formular 1" component={Formular1Stack} options={{ headerShown: false }} />
       <Drawer.Screen name="NFL" component={NFLStack} options={{ headerShown: false }} />
       <Drawer.Screen name="Baseball" component={BaseballStack}  options={{ headerShown: false }}/>
-      <Drawer.Screen name="Profile" component={ProfileStack}  options={{ headerShown: false }}/>
+      {/* <Drawer.Screen name="Profile" component={ProfileStack}  options={{ headerShown: false }}/> */}
     </Drawer.Navigator>
   )
 }
