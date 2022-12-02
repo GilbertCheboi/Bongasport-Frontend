@@ -6,6 +6,7 @@ import Formular1Detail from '../screens/Formular1Detail';
 import Formula1Create from '../screens/Formula1Create';
 import ProfileScreen from '../screens/ProfileScreen';
 import OthersProfileScreen from '../screens/OthersProfileScreen';
+import EditProfile from '../screens/EditProfile';
 
 
 export default function Formular1Stack() {
@@ -17,6 +18,7 @@ export default function Formular1Stack() {
         <Stack.Screen name="Create F1" component={Formula1Create} options={{ headerShown: false }}/>
         <Stack.Screen name="profile" component={ProfileScreen} options={{ headerShown: false }}/>
         <Stack.Screen name="otherprofile" component={OthersProfileScreen} options={{ headerShown: false }}/>
+        <Stack.Screen name="edit_profile" component={EditProfile} options={{ headerShown: false }}/>
       </Stack.Navigator>
   )
 }

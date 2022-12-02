@@ -6,6 +6,7 @@ import BaseballDetail from '../screens/BaseballDetail';
 import BaseballCreate from '../screens/BaseballCreate';
 import ProfileScreen from '../screens/ProfileScreen';
 import OthersProfileScreen from '../screens/OthersProfileScreen';
+import EditProfile from '../screens/EditProfile';
 
 export default function BaseballStack() {
     const Stack = createNativeStackNavigator();
@@ -16,6 +17,7 @@ export default function BaseballStack() {
         <Stack.Screen name="Detail Baseball" component={BaseballDetail} options={{headerShown: false}} />
         <Stack.Screen name="profile" component={ProfileScreen} options={{ headerShown: false }}/>
         <Stack.Screen name="otherprofile" component={OthersProfileScreen} options={{ headerShown: false }}/>
+        <Stack.Screen name="edit_profile" component={EditProfile} options={{ headerShown: false }}/>
       </Stack.Navigator>
     )
   }

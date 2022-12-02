@@ -13,7 +13,7 @@ import {
   Text,
   View,
   Image,
-  TextInput,
+  TextInput, Alert,
   Button,
   TouchableOpacity,
 } from "react-native";
@@ -36,12 +36,13 @@ export default function EditProfile() {
   const [selectedF1, setSelectedF1] = useState();
   const {userToken} = useContext(AuthContext)
   const {userInfo} = useContext(AuthContext);
+  const {data, setData} = useContext([]);
   const usernamee = userInfo.user.username
   // const navigation =useNavigation();
 
   const editData = (bio, location, name, last_name, first_name) => {
     fetch(`http://gilscore.azurewebsites.net/api/profiles/${usernamee}/edit`,{
-     method: 'POST',
+     method: 'PUT',
      headers:{
       'Content-Type':'application/json',
       'Authorization': 'Token ' + userToken
@@ -123,7 +124,7 @@ export default function EditProfile() {
       style={styles.TextInput}
       placeholder="bio"
       placeholderTextColor="#333"
-      value={bio}
+      value={data.bio}
       onChangeText={(bio) => setBio(bio)}
     />
     </View>
@@ -138,8 +139,8 @@ export default function EditProfile() {
         onChangeText={(password) => setPassword(password)}
       />
     </View> */}
-<View style={styles.selectView}>
-<Text style={styles.label}>Football</Text>
+{/* <View style={styles.selectView}> */}
+{/* <Text style={styles.label}>Football</Text>
     <Picker
         selectedValue={selectedClub}
         style={{ height: 50, width: 150 }}
@@ -173,9 +174,9 @@ export default function EditProfile() {
         <Picker.Item label="LA Lakers" value="la" />
         <Picker.Item label="Celtic" value="ct" />
       </Picker>
-      </View>
+      </View> */}
 
-      <DropDownPicker 
+      {/* <DropDownPicker 
       soccerIcon  = {[
         {
           label: "select Team",
@@ -200,7 +201,7 @@ export default function EditProfile() {
         height:50,
       }}
       onChangeSearchItem={(soccerIcon)=> {setSoccerIcon(soccerIcon.icon);}}
-    />  
+    />   */}
 
     <TouchableOpacity style={styles.loginBtn} onPress={()=>{editData(bio)}}>
       <Text style={styles.loginText}>Save</Text>

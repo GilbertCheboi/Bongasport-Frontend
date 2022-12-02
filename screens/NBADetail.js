@@ -11,39 +11,67 @@ import { AuthContext } from '../context/AuthContext';
 
 export default function NBADetail(props) {
   const dataa = props.route.params.data;
+  const id = dataa.id
   const [data, setData] = useState([]) 
   const [loading, setLoading] = useState(true)
   const [liked, setLiked] = useState(false);
   const [comment, setComment] = useState([]) 
   const {userToken, userInfo} = useContext(AuthContext);
+  const [content, setContent] = useState([]) ;
 
 
-  const loadData = () => { 
-    fetch('http://gilscore.azurewebsites.net/api/NBA/feed/', {
+
+  const loadComment = () => { 
+    fetch(`https://gilscore.azurewebsites.net/api/NBA/tweetcomments/${id}/`, {
       method: 'GET',
       headers:{
+        'Content-Type':'application/json',
+
         'Authorization': 'Token ' + userToken
       }
      }) 
      .then(resp => resp.json())
      .then(data => {
-      console.log(data)
-        setData(data.results)
-        // console.log(data.results)
+        setData(data)
+        console.log(data)
         setLoading(false)
      })
-     .catch(error => Alert.alert('Error', error.message))
-   }
+     .catch(error =>
+      console.log(error, 'Error'))
+     }
 
-    useEffect(() => {
-     loadData();
-    }, [])  
+  useEffect(() => {
+     loadComment();
+    }, [])
+    
+    const createLoad =() => {
+      const fomdata = new FormData();
+      fomdata.append('id', id);
+      fomdata.append('content', content);
+      //data.append('image', image);
+        fetch('https://gilscore.azurewebsites.net/api/NBA/commentweet/', {
+        method: 'POST',
+        headers: {
+          'Content-Type':'multipart/form-data; boundary=----WebKitFormBoundary7MA4YWxkTrZu0gW',
+            // 'Content-Type':'application/x-www-form-urlencoder',
+            'Authorization': 'Token ' + userToken
+        },
+          // body: createFormData(content, {userId: userInfo.user.id})
+          body: fomdata,
+      })
+      .then(resp => resp.json())
+      .then(created => { 
+        console.log(created)
+        // props.navigation.navigate('Detail NBA')
+      })
+      .catch(error=> Alert.alert('Error', error.message))
+    }
+    
 
-
-    const renderDataa = (item) => {  
+    const renderComment = (item) => {  
 
       return(
-          <Card        onPress= {() => clickedItem(item)} >
+          <Card>
                          
             <View style={styles.background}>
             <View style={styles.container}>
@@ -126,40 +154,6 @@ export default function NBADetail(props) {
       )
   }
   
-
-  // const loadComment = () => { 
-  //   fetch('http://192.168.25.107:8000/api/Baseball/commentfeed/', {
-  //     method: 'GET'
-  //    }) 
-  //    .then(resp => resp.json())
-  //    .then(comment => {
-  //       setComent(comment.results)
-  //       setLoading(false)
-  //    })
-  //    .catch(error => Alert.alert('Error', error.message))
-  //  }
-
-  // useEffect(() => {
-  //    loadComment();
-  //   }, [])
-    
-
-  // const CommentDelete = (data) =>{
-  //   fetch(`http://192.168.25.107:8000/api/predictions/commentfeed${data.id}/`, {
-  //     method: 'GET',
-  //     headers: {
-  //       'Content-Type':'aplication/json'
-  //     }
-  //   })
-  // }
-
-  const renderData = (item) => {      
-    return(
-        <Card style={{padding:10, margin: 5}} onPress = {() => clickedItem(item)} >
-            <Text>Heel</Text>
-        </Card>
-    )
-}
   return (
   
                            
@@ -235,15 +229,15 @@ export default function NBADetail(props) {
                   <View style={styles.comment}>
                         <TextInput style={styles.input}
                     label="content"
-                    // value={content}
+                    value={content}
                     mode= 'outlined'
                     multiline
                     placeholder="Comment"
                     numberOfLines={3}
-                    // onChangeText={text => setContent(text)}
+                    onChangeText={content => setContent(content)}
                   /> 
                   <TouchableOpacity style={styles.commentButton}
-                  // onPress={() => createComment()}
+                  onPress={() => createLoad()}
                   >
                       {/* <SimpleLineIcons name={'share'} size={16} color={'rgb(136, 153, 166)'}/> */}
                       <MaterialCommunityIcons name="send" size={30} color={'rgb(136, 153, 166)'} />
@@ -253,7 +247,7 @@ export default function NBADetail(props) {
                 <FlatList         
                data={data}
                 renderItem={({ item }) => {
-                    return renderDataa(item)
+                    return renderComment(item)
                 }}
                 // refreshing={loading}
                 // onRefresh={loadData}
