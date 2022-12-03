@@ -76,7 +76,7 @@ export default function BaseballScreen(props) {
                 </View>              
                 <View style={styles.info}>
                   <View style={styles.userDetails}>
-                    <Text style={styles.userName}>{item.user.first_name}
+                    <Text style={styles.userName}>{item.user.First_Name} {item.user.First_Name}
                       <Text style={styles.userHandleAndTime}>  @{item.user.username} {item.timestamp}   {}</Text>
                       
                     </Text>

@@ -56,7 +56,7 @@ export default function FootballDetail(props) {
     
     const createLoad =() => {
       const fomdata = new FormData();
-      fomdata.append('id', id);
+      fomdata.append('tweet', id);
       fomdata.append('content', content);
       //data.append('image', image);
         fetch('https://gilscore.azurewebsites.net/api/Europa/commentweet/', {
@@ -67,13 +67,15 @@ export default function FootballDetail(props) {
             'Authorization': 'Token ' + userToken
         },
           // body: createFormData(content, {userId: userInfo.user.id})
-          // body: fomdata,
+           body: fomdata,
           // body: 'id: id
       })
       .then(resp => resp.json())
       .then(created => { 
         console.log(created)
-        props.navigation.navigate('Football Home')
+        Alert.alert('comment succesful')
+        setLoading (true)
+        //props.navigation.navigate('Football Home')
       })
       .catch(error=> Alert.alert('Error', error.message))
     }
@@ -129,7 +131,7 @@ export default function FootballDetail(props) {
                       <TouchableOpacity>
                       <Image
                         style={styles.photo}
-                        source={{uri: item.user.NBA}}/>
+                        source={{uri: item.user.Europa}}/>
                       </TouchableOpacity>
                   </View> 
                   
@@ -221,7 +223,7 @@ export default function FootballDetail(props) {
               <TouchableOpacity>
               <Image
                 style={styles.photo}
-                source={{uri: import_data.user.NBA}}/>
+                source={{uri: import_data.user.Europa}}/>
               </TouchableOpacity>
           </View> 
           
@@ -309,8 +311,8 @@ export default function FootballDetail(props) {
                 renderItem={({ item }) => {
                     return renderComment(item)
                 }}
-                // refreshing={loading}
-                // onRefresh={loadComment}
+                 refreshing={loading}
+                 onRefresh={loadComment}
                 keyExtractor={(item) => `${item.id}`}
               />
           
@@ -460,8 +462,8 @@ const styles = StyleSheet.create({
     // borderBottomWidth: 2,
     paddingBottom:10,
     paddingTop: 5,
-    margin:50,
-    // marginBottom: 10,
+    marginTop:20,
+    marginBottom: 10,
     borderRadius: 10,
     backgroundColor: '#fff',
     marginLeft: 7.5,
