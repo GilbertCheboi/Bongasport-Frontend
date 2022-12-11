@@ -12,15 +12,19 @@ import DocumentPicker from 'react-native-document-picker';
 
 export default function FootballCreate(props) {
 
-    const [content, setContent]=  useState();
-    const [image, setGame_image] = useState(null);
+    const [content, setContent]=  useState(null);
+    const [imageUp, setImageUp] = useState(null);
     const {userToken, userInfo} = useContext(AuthContext);
     // const csrftoken = userToken;
 
     const createLoad =() => {
         const data = new FormData();
         data.append('content', content);
-        //data.append('image', image);
+        data.append('image', {
+          uri: imageUp,
+            name: 'my-image.png',
+            type: 'image/png', 
+        });
         fetch('http://gilscore.azurewebsites.net/api/Europa/create/', {
           method: 'POST',
           headers: {
@@ -43,14 +47,19 @@ export default function FootballCreate(props) {
         let result = await ImagePicker.launchImageLibraryAsync({
           mediaTypes: ImagePicker.MediaTypeOptions.All,
           allowsEditing: false,
-          aspect: [1, 1],
+          aspect: [4, 3],
           quality: 1,
         });
       
         console.log(result);
       
         if (!result.cancelled) {
-          setGame_image(result.uri);
+          // formData.current.append('image', {
+          //   uri: result.uri,
+          //   name: 'my-image.png',
+          //   type: 'image/png',
+          // });
+          setImageUp(result.uri);
         }
       };
      
@@ -88,7 +97,7 @@ export default function FootballCreate(props) {
       onChangeText={content => setContent(content)}
     />
     <Button title="Pick an image from camera roll" onPress={selectFile} />
-      {image && <Image source={{ uri:image }} style={{ width: 200, height: 200 }} />}
+      {imageUp && <Image source={{ uri:imageUp }} style={{ width: 200, height: 200 }} />}
     <Button
       buttonStyle={{ width: 150, alignSelf: 'center' }}
       containerStyle={{ margin: 5 }}
