@@ -14,7 +14,7 @@ export default function Formular1Stack() {
   return (
      <Stack.Navigator>
         <Stack.Screen name="Formular1" component={Formular1Screen} options={{ headerShown: false }}/>
-        <Stack.Screen name="Detail F1" component={Formular1Detail} options={{ headerShown: false }}/>
+        <Stack.Screen name="Detail F1" component={Formular1Detail} title= "Details"options={{ headerShown: false }}/>
         <Stack.Screen name="Create F1" component={Formula1Create} options={{ headerShown: false }}/>
         <Stack.Screen name="profile" component={ProfileScreen} options={{ headerShown: false }}/>
         <Stack.Screen name="otherprofile" component={OthersProfileScreen} options={{ headerShown: false }}/>

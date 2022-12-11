@@ -57,6 +57,7 @@ export default function ProfileScreen() {
     </TouchableOpacity>
       <View style={styles.profileInfo}>
         <Text style={styles.username}>{data.email}</Text>
+        <Text style={styles.username}>{data.First_Name} {data.Last_Name}</Text>
         <Text style={styles.username}>@{username}</Text>
         <Text style={styles.bio}>{data.bio}</Text>
         <Text style={styles.followers}>

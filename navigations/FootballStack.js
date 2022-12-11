@@ -14,7 +14,7 @@ export default function FootballStack() {
   return (
      <Stack.Navigator>
         <Stack.Screen name="Football Home" component={FootballScreen} options={{ headerShown: false }}/>
-        <Stack.Screen name="Detail Football" component={FootballDetail} options={{ headerShown: false }}/>
+        <Stack.Screen name="Detail Football" component={FootballDetail}options={{ headerMode: 'float' }} />
         <Stack.Screen name="Create Football" component={FootballCreate} options={{ headerShown: false }}/>
         <Stack.Screen name="profile" component={ProfileScreen} options={{ headerShown: false }}/>
         {/* <Stack.Screen name="Edit" component={EditProfile} options={{ headerShown: false }}/> */}

@@ -1,17 +1,10 @@
-// import { Image, ImageBackground, StyleSheet, Text, TextInput, Button, View, ScrollView } from 'react-native';
-// import React, { useState, useContext } from 'react'
-// import { useNavigation } from '@react-navigation/native';
-// import { AuthContext } from '../context/AuthContext';
-// import * as ImagePicker from 'expo-image-picker';
-import DropDownPicker from 'react-native-dropdown-picker';
-
 import { AuthContext } from '../context/AuthContext';
 import { StatusBar } from "expo-status-bar";
 import React, { useEffect, useState, useContext } from "react";
 import {
   StyleSheet,
   Text,
-  View,
+  View, ScrollView,
   Image,
   TextInput, Alert,
   Button,
@@ -19,7 +12,7 @@ import {
 } from "react-native";
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { Avatar, Divider } from "react-native-elements";
-import {Picker} from '@react-native-picker/picker';
+import * as ImagePicker from 'expo-image-picker';
 
 export default function EditProfile() {
 
@@ -28,6 +21,11 @@ export default function EditProfile() {
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
   const [bio, setBio] = useState("");
+  const [location, setLocation] = useState("");
+  const [profileImage, setProfileImage] = useState(profileImage);
+  
+  const [loading, setLoading] = useState(true)
+  
   const [username, setUserName] = useState(null);
   const [email, setEmail] = useState(null);
   const [password, setPassword] = useState(null);
@@ -36,19 +34,38 @@ export default function EditProfile() {
   const [selectedF1, setSelectedF1] = useState();
   const {userToken} = useContext(AuthContext)
   const {userInfo} = useContext(AuthContext);
-  const {data, setData} = useContext([]);
+  const [data, setData] = useState([]);
   const usernamee = userInfo.user.username
   // const navigation =useNavigation();
 
-  const editData = (bio, location, name, last_name, first_name) => {
-    fetch(`http://gilscore.azurewebsites.net/api/profiles/${usernamee}/edit`,{
+  const editData = () => {
+    const formdata = new FormData();
+    formdata.append('Last_Name', lastName);
+    formdata.append('First_Name', firstName);
+    formdata.append('location', location);
+    formdata.append('bio', bio);
+    formdata.append('image', {
+      uri: profileImage,
+      name: 'my-image.jpeg',
+      type: 'image/jpeg',
+      });
+    fetch(`https://gilscore.azurewebsites.net/api/profiles/update-profile/`,{
      method: 'PUT',
+     data: data,
      headers:{
-      'Content-Type':'application/json',
+      'Content-Type':'multipart/form-data; boundary=----WebKitFormBoundary7MA4YWxkTrZu0gW',
+      // 'Content-Type':'application/x-www-form-urlencoder',
       'Authorization': 'Token ' + userToken
      },
-     body: JSON.stringify(bio)
-    })
+     body: formdata,
+    //  body: JSON.stringify({
+    //   Last_Name: lastName,
+    //   First_Name: firstName,
+    //   location: location,
+    //   bio: bio,
+    //   image: profileImage,
+    //  })
+      })
 
     .then(resp => resp.json())
     .then(data => {
@@ -56,75 +73,119 @@ export default function EditProfile() {
        console.log(data)
        setLoading(false)
     })
-    .catch(error => Alert.alert('Error', error.message))
+    .catch(error => Alert.alert('Errorr', error.message))
   }
+  
 
-  useEffect(() =>{
-    editData();
-   }, [])
+  const selectFile = async () => {
+    // No permissions request is necessary for launching the image library
+    let result = await ImagePicker.launchImageLibraryAsync({
+      mediaTypes: ImagePicker.MediaTypeOptions.All,
+      allowsEditing: false,
+      aspect: [4, 3],
+      quality: 1,
+    });
+  
+    console.log(result);
+  
+    if (!result.cancelled) {
+      // formData.current.append('image', {
+      //   uri: result.uri,
+      //   name: 'my-image.png',
+      //   type: 'image/png',
+      // });
+      setProfileImage(result.uri);
+    }
+  };
+
+  // useEffect(() =>{
+  //   editData();
+  //  }, [])
 
 
+  //  const onChangeBio = (value) => {
+  //   setBio(value)
+  //  }
   return (
-    <View style={styles.container}>
-    <Image style={styles.image}  />
+    <View>
+      <ScrollView>
+        <View style={styles.container}>
+          <Image style={styles.image}/>
+          <StatusBar style="auto" />
+          <Text style={styles.loginHeader} >Edit Profile</Text>
+          <Avatar
+            rounded
+            size="large"
+            icon={{name: 'user', type: 'font-awesome'}}
+            overlayContainerStyle={{backgroundColor: '#286086'}}
+            // source={{ uri:data.image}}
+            containerStyle={styles.avatar}
+          />
+          <TouchableOpacity style={styles.shareButton} onPress={() => selectFile()}>
+            <MaterialCommunityIcons name="share-variant" size={16} color={'#09899b'} />
+          </TouchableOpacity>
+          <View style={styles.inputView}>
+            <MaterialCommunityIcons name="account" size={20} />
+            <TextInput
+              style={styles.TextInput}
+              placeholder="First Name"
+              placeholderTextColor="#666"
+              // defaultValue = {data.user.First_Name}
+              onChangeText={(First_Name) => setFirstName(First_Name)}
+            />
+          </View> 
+          <View style={styles.inputView}>
+            <MaterialCommunityIcons name="account" size={20} />
+            <TextInput
+              style={styles.TextInput}
+              placeholder="Last Name"
+              placeholderTextColor="#666"
+              // defaultValue = {data.user.Last_Name}
+              onChangeText={(Last_Name) => setLastName(Last_Name)}
+            />
+          </View>
+          <View style={styles.inputView}>
+            <MaterialCommunityIcons name="account" size={20} />
+            <TextInput
+              style={styles.TextInput}
+              placeholderTextColor="#666"
+              // defaultValue = {data.user.location}
+              onChangeText={(location) => setLocation(location)}
+            />
+          </View>
 
-    <StatusBar style="auto" />
-    <Text style={styles.loginHeader} >Edit Profile</Text>
+          {/* <View style={styles.inputView}>
+            <MaterialCommunityIcons name="at" size={20} />
+            <TextInput
+              style={styles.TextInput}
+              placeholder="Username"
+              placeholderTextColor="#666"
+              value={username}
+              onChangeText={(username) => setUserName(username)}
+            />
+          </View> */}
 
-    <Avatar
-        rounded
-        size="large"
-        // source={{ uri:data.image}}
-        containerStyle={styles.avatar}
-      />
     {/* <View style={styles.inputView}>
-  <MaterialCommunityIcons name="account" size={20} />
-    <TextInput
-      style={styles.TextInput}
-      placeholder="First Name"
-      placeholderTextColor="#333"
-      onChangeText={(firstName) => setFirstName(firstName)}
-    />
-  </View> */}
-  {/* <View style={styles.inputView}>
-  <MaterialCommunityIcons name="account" size={20} />
-    <TextInput
-      style={styles.TextInput}
-      placeholder="Last Name"
-      placeholderTextColor="#333"
-      onChangeText={(lastName) => setLastName(lastName)}
-    />
-  </View> */}
-
-  <View style={styles.inputView}>
-  <MaterialCommunityIcons name="at" size={20} />
-    <TextInput
-      style={styles.TextInput}
-      placeholder="Username"
-      placeholderTextColor="#333"
-      value={username}
-      onChangeText={(username) => setUserName(username)}
-    />
-  </View>
-
-    <View style={styles.inputView}>
     <MaterialCommunityIcons name="at" size={20} />
       <TextInput
         style={styles.TextInput}
         placeholder="Email."
         keyboardType="email-address"
-        placeholderTextColor="#333"
+        placeholderTextColor="#666666"
         value={email}
         onChangeText={(email) => setEmail(email)}
       />
-    </View>
+    </View> */}
 
     <View style={styles.inputView}>
        <TextInput
-      style={styles.TextInput}
+      style={styles.TextInput} 
+      multiline
+      numberOfLines={3}
       placeholder="bio"
-      placeholderTextColor="#333"
-      value={data.bio}
+      placeholderTextColor="#666666"
+      // defaultValue = {data.user.bio}
+      // value={bio}
       onChangeText={(bio) => setBio(bio)}
     />
     </View>
@@ -204,7 +265,7 @@ export default function EditProfile() {
     />   */}
 
     <TouchableOpacity style={styles.loginBtn} onPress={()=>{editData(bio)}}>
-      <Text style={styles.loginText}>Save</Text>
+      <Text style={styles.loginText}>Update</Text>
     </TouchableOpacity>
 
     {/* <View  style={styles.register}>
@@ -215,6 +276,9 @@ export default function EditProfile() {
       <Text style={styles.register_button}>Login</Text>
     </TouchableOpacity>
     </View> */}
+
+    </View>
+    </ScrollView>
     </View>
   )
 }
@@ -228,11 +292,11 @@ const styles = StyleSheet.create({
     paddingHorizontal: 20,
   },
   avatar: {
-    // marginLeft: 10,
-    // marginTop: 0,
-    borderWidth: 3,
-    borderColor: "black",
-    borderStyle: "solid",
+    marginLeft: 10,
+    marginTop: 0,
+    // borderWidth: 3,
+    // borderColor: "black",
+    // borderStyle: "solid",
   },
   label: {
     marginBottom: 7,
@@ -245,10 +309,15 @@ const styles = StyleSheet.create({
   loginHeader: {
     fontSize: 28,
     marginBottom: 20 ,
-    color: 'red', 
+    color: '#286086', 
     // justifyContent: "center",
 
   },
+  loginText: {
+    color: '#fff',
+    fontSize: 18,
+
+    },
   inputView: {
     borderBottomColor:'#ccc',
     borderBottomWidth:1,
@@ -280,7 +349,7 @@ const styles = StyleSheet.create({
   },
  
   register_button:{
-    color: 'red'
+    color: '#286086'
   },
  
   loginBtn: {
@@ -290,13 +359,22 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
     marginTop: 20,
-    backgroundColor: "red",
+    backgroundColor: "#286086",
   },
   register:{
     flexDirection: 'row',
     justifyContent: "center",
     marginTop: 30,
-  }
+  },
+
+  shareButton: {
+    color: "#286086",
+    padding: 5,
+    alignItems: "center",
+    flexDirection: "row",
+    borderColor: "red",
+    borderWidth: 0, 
+  },
 });
 
 

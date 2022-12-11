@@ -26,7 +26,6 @@ export default function FootballScreen(props) {
      .then(resp => resp.json())
      .then(data => {
         setData(data.results)
-        console.log(data.results)
         setLoading(false)
      })
      .catch(error =>
