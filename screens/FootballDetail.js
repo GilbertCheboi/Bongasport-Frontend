@@ -2,14 +2,17 @@ import { Text,FlatList,TextInput, Alert, Button, View, StyleSheet,TouchableOpaci
 import React, { Component, useState,useEffect, useContext } from 'react'
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { AuthContext } from '../context/AuthContext';
+import * as ImagePicker from 'expo-image-picker';
 import { Card } from 'react-native-paper';
 
 export default function FootballDetail(props) {
 
   const import_data = props.route.params.data;
+  console.log(import_data)
   const id = import_data.id
   const [liked, setLiked] = useState(false);
   const [content, setContent] = useState([]) ;
+  const [imageUp, setImageUp] = useState(null);
   const [data, setData] = useState([]) ;
   const [loading, setLoading] = useState(true);
   const {userToken, userInfo} = useContext(AuthContext);
@@ -58,6 +61,11 @@ export default function FootballDetail(props) {
       const fomdata = new FormData();
       fomdata.append('tweet', id);
       fomdata.append('content', content);
+      fomdata.append('image', {
+        uri: imageUp,
+          name: 'my-image.png',
+          type: 'image/png', 
+      });
       //data.append('image', image);
         fetch('https://gilscore.azurewebsites.net/api/Europa/commentweet/', {
         method: 'POST',
@@ -80,6 +88,29 @@ export default function FootballDetail(props) {
       .catch(error=> Alert.alert('Error', error.message))
     }
 
+    const selectFile = async () => {
+      // No permissions request is necessary for launching the image library
+      let result = await ImagePicker.launchImageLibraryAsync({
+        mediaTypes: ImagePicker.MediaTypeOptions.All,
+        allowsEditing: false,
+        aspect: [4, 3],
+        quality: 1,
+      });
+    
+      console.log(result);
+    
+      if (!result.cancelled) {
+        // formData.current.append('image', {
+        //   uri: result.uri,
+        //   name: 'my-image.png',
+        //   type: 'image/png',
+        // });
+        setImageUp(result.uri);
+      }
+    };
+   
+   
+
 
     // const data= {content:content}
     
@@ -100,11 +131,15 @@ export default function FootballDetail(props) {
     // }
    
     
+    const clickedItem = (data) => { 
+      props.navigation.navigate('Detail1 Football',{data:data}) }
+      const clickedProfile = (data) => { 
+        props.navigation.navigate('otherprofile',{data:data}) }   
 
     const renderComment = (item) => {  
 
       return(
-          <Card      >
+          <Card   onPress= {() => clickedItem(item)}    >
                          
             <View style={styles.background}>
             <View style={styles.containerComment}>
@@ -152,11 +187,11 @@ export default function FootballDetail(props) {
                   </View>
                   <View>
                     <View style={styles.tweetActionsContainer}>
-                      {/* <TouchableOpacity style={styles.commentButton}>
+                      <TouchableOpacity style={styles.commentButton}>
                         <MaterialCommunityIcons name="reply" style={styles.commentButtonIcon} size={20} color={'#09899b'} />
-                        <Text style={styles.commentsCount}></Text>
+                        <Text style={styles.commentsCount}>{item.total_comments}</Text>
                       </TouchableOpacity>
-                      <TouchableOpacity  style={styles.retweetButton}>
+                       {/*<TouchableOpacity  style={styles.retweetButton}>
                         <EvilIcons name={'retweet'} size={25} color={(retweeted) ? "rgb(23, 191, 99)":'rgb(136, 153, 166)'}/> 
                         <MaterialCommunityIcons name="repeat" size={20} color={'#09899b'} />
                         <Text style={[styles.retweetButtonIcon, {color:"#09899b",fontWeight:"bold"}]}></Text>
@@ -277,11 +312,16 @@ export default function FootballDetail(props) {
           numberOfLines={3}
           onChangeText={content=> setContent(content)}
         /> 
+        </View>
+        <View>
+        <Button title="Pick an image from camera roll" onPress={selectFile} />
+        {imageUp && <Image source={{ uri:imageUp }} style={{ width: 200, height: 200 }} />}
+        </View>
         <TouchableOpacity style={styles.commentButton} onPress={() => createLoad()}>
             {/* <SimpleLineIcons name={'share'} size={16} color={'rgb(136, 153, 166)'}/> */}
             <MaterialCommunityIcons name="send" size={30} color={'rgb(136, 153, 166)'} />
         </TouchableOpacity>     
-      </View>
+      
       <FlatList         
           data={data}
           renderItem={({ item }) => {

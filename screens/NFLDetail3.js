@@ -4,7 +4,7 @@ import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { AuthContext } from '../context/AuthContext';
 import { Card } from 'react-native-paper';
 
-export default function NFLDetail(props) {
+export default function NFLDetail3 (props) {
 
   const import_data = props.route.params.data;
   const id = import_data.id
@@ -17,7 +17,7 @@ export default function NFLDetail(props) {
 
 
   const loadComment = () => { 
-    fetch(`https://gilscore.azurewebsites.net/api/NFL/tweetcomments/${id}/`, {
+    fetch(`https://gilscore.azurewebsites.net/api/NFL/tweetcomments3/${id}/`, {
       method: 'GET',
       headers:{
         'Content-Type':'application/json',
@@ -56,10 +56,10 @@ export default function NFLDetail(props) {
     
     const createLoad =() => {
       const fomdata = new FormData();
-      fomdata.append('tweet', id);
+      fomdata.append('comment2', id);
       fomdata.append('content', content);
       //data.append('image', image);
-        fetch('https://gilscore.azurewebsites.net/api/NFL/commentweet/', {
+        fetch('https://gilscore.azurewebsites.net/api/NFL/commentweet3/', {
         method: 'POST',
         headers: {
           'Content-Type':'multipart/form-data; boundary=----WebKitFormBoundary7MA4YWxkTrZu0gW',
@@ -100,7 +100,7 @@ export default function NFLDetail(props) {
     // }
    
     const clickedItem = (data) => { 
-      props.navigation.navigate('Detail1 NFL',{data:data}) }
+      props.navigation.navigate('Detail4 NFL',{data:data}) }
     const clickedProfile = (data) => { 
       props.navigation.navigate('otherprofile',{data:data}) }
 

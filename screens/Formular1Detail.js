@@ -4,7 +4,7 @@ import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { AuthContext } from '../context/AuthContext';
 import { Card } from 'react-native-paper';
 
-export default function FootballDetail(props) {
+export default function Formula1Detail(props) {
 
   const import_data = props.route.params.data;
   const id = import_data.id
@@ -98,13 +98,21 @@ export default function FootballDetail(props) {
     //   })
     //   .catch(error=> Alert.alert('Error', error.message))
     // }
-   
+
+    // useEffect(() => {
+    //   loadComment();
+    //  }, [])  
+ 
+     const clickedItem = (data) => { 
+       props.navigation.navigate('Detail1 F1',{data:data}) }
+       const clickedProfile = (data) => { 
+         props.navigation.navigate('otherprofile',{data:data}) }
     
 
     const renderComment = (item) => {  
 
       return(
-          <Card      >
+          <Card   onPress= {() => clickedItem(item)} >    
                          
             <View style={styles.background}>
             <View style={styles.container}>

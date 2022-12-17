@@ -6,6 +6,9 @@ import ProfileScreen from '../screens/ProfileScreen';
 import EditProfile from '../screens/EditProfile';
 import FootballCreate from '../screens/FootballCreate';
 import FootballDetail from '../screens/FootballDetail';
+import FootballDetail1 from '../screens/FootballDetail1';
+import FootballDetail2 from '../screens/FootballDetail2';
+import FootballDetail3 from '../screens/FootballDetail3';
 import OthersProfileScreen from '../screens/OthersProfileScreen';
 
 
@@ -15,6 +18,9 @@ export default function FootballStack() {
      <Stack.Navigator>
         <Stack.Screen name="Football Home" component={FootballScreen} options={{ headerShown: false }}/>
         <Stack.Screen name="Detail Football" component={FootballDetail}options={{ headerMode: 'float' }} />
+        <Stack.Screen name="Detail1 Football" component={FootballDetail1}options={{ headerMode: 'float' }} />
+        <Stack.Screen name="Detail2 Football" component={FootballDetail2}options={{ headerMode: 'float' }} />
+        <Stack.Screen name="Detail3 Football" component={FootballDetail3}options={{ headerMode: 'float' }} />
         <Stack.Screen name="Create Football" component={FootballCreate} options={{ headerShown: false }}/>
         <Stack.Screen name="profile" component={ProfileScreen} options={{ headerShown: false }}/>
         {/* <Stack.Screen name="Edit" component={EditProfile} options={{ headerShown: false }}/> */}

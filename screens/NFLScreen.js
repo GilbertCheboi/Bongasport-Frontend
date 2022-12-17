@@ -109,7 +109,7 @@ export default function NFLScreen(props) {
                   <View style={styles.tweetActionsContainer}>
                     <TouchableOpacity style={styles.commentButton}>
                       <MaterialCommunityIcons name="reply" style={styles.commentButtonIcon} size={20} color={'#09899b'} />
-                      <Text style={styles.commentsCount}>4</Text>
+                      <Text style={styles.commentsCount}>{item.total_comments}</Text>
                     </TouchableOpacity>
                     <TouchableOpacity  style={styles.retweetButton}>
                       {/* <EvilIcons name={'retweet'} size={25} color={(retweeted) ? "rgb(23, 191, 99)":'rgb(136, 153, 166)'}/> */}

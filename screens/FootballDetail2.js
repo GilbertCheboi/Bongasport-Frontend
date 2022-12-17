@@ -1,10 +1,10 @@
-import { Text,FlatList,TextInput, Alert, Button, View, StyleSheet,TouchableOpacity, TouchableHighlight, Image, ScrollView } from 'react-native'
+import { Text,FlatList,TextInput, Alert, Button, View, StyleSheet,TouchableOpacity, TouchableHighlight, Image, ScrollView, SafeAreaView } from 'react-native'
 import React, { Component, useState,useEffect, useContext } from 'react'
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { AuthContext } from '../context/AuthContext';
 import { Card } from 'react-native-paper';
 
-export default function NFLDetail(props) {
+export default function FootballDetail2(props) {
 
   const import_data = props.route.params.data;
   const id = import_data.id
@@ -17,7 +17,7 @@ export default function NFLDetail(props) {
 
 
   const loadComment = () => { 
-    fetch(`https://gilscore.azurewebsites.net/api/NFL/tweetcomments/${id}/`, {
+    fetch(`https://gilscore.azurewebsites.net/api/Europa/tweetcomments2/${id}/`, {
       method: 'GET',
       headers:{
         'Content-Type':'application/json',
@@ -56,10 +56,10 @@ export default function NFLDetail(props) {
     
     const createLoad =() => {
       const fomdata = new FormData();
-      fomdata.append('tweet', id);
+      fomdata.append('comment1', id);
       fomdata.append('content', content);
       //data.append('image', image);
-        fetch('https://gilscore.azurewebsites.net/api/NFL/commentweet/', {
+        fetch('https://gilscore.azurewebsites.net/api/Europa/commentweet2/', {
         method: 'POST',
         headers: {
           'Content-Type':'multipart/form-data; boundary=----WebKitFormBoundary7MA4YWxkTrZu0gW',
@@ -99,33 +99,34 @@ export default function NFLDetail(props) {
     //   .catch(error=> Alert.alert('Error', error.message))
     // }
    
+    
     const clickedItem = (data) => { 
-      props.navigation.navigate('Detail1 NFL',{data:data}) }
-    const clickedProfile = (data) => { 
-      props.navigation.navigate('otherprofile',{data:data}) }
+      props.navigation.navigate('Detail3 Football',{data:data}) }
+      const clickedProfile = (data) => { 
+        props.navigation.navigate('otherprofile',{data:data}) }   
 
     const renderComment = (item) => {  
 
       return(
-          <Card     onPress= {() => clickedItem(item)}   >
+          <Card   onPress= {() => clickedItem(item)}    >
                          
             <View style={styles.background}>
-            <View style={styles.container}>
+            <View style={styles.containerComment}>
               <View style={styles.innerContainer}>
                 <View style={styles.innerHeaderContainer}>
                   <View style={styles.photoContainer}>
                     <View style={styles.innerPhotoContainer}>
                       <TouchableOpacity onPress={ () => clickedProfile(item)}>
                       <Image
-                        style={styles.photo}
+                        style={styles.photoComment}
                         source={{uri: item.user.image}}/>
                       </TouchableOpacity>
                     </View>
                   </View>              
-                  <View style={styles.info}>
-                    <View style={styles.userDetails}>
-                      <Text style={styles.userName}>{item.user.First_name} {item.user.Last_name}
-                        <Text style={styles.userHandleAndTime}>  @{item.user.username} {item.timestamp}   {}</Text>
+                  <View style={styles.infoComment}>
+                    <View style={styles.userDetailsComment}>
+                      <Text style={styles.userNameComment}>{item.user.First_name} {item.user.Last_name}
+                        <Text style={styles.userHandleAndTimeComment}>  @{item.user.username} {item.timestamp}   {}</Text>
                         
                       </Text>
                     </View>
@@ -133,8 +134,8 @@ export default function NFLDetail(props) {
                   <View style={styles.innerClubContainer}>
                       <TouchableOpacity>
                       <Image
-                        style={styles.photo}
-                        source={{uri: item.user.NFL}}/>
+                        style={styles.photoComment}
+                        source={{uri: item.user.Europa}}/>
                       </TouchableOpacity>
                   </View> 
                   
@@ -142,7 +143,7 @@ export default function NFLDetail(props) {
                 <View style={styles.BodyContainer}>
                 <View style={styles.tweetBodyContainer}>
                   <View style={styles.tweetTextContainer}>
-                    <Text style={styles.tweetText}> {item.content}</Text>
+                    <Text style={styles.tweetCText}> {item.content}</Text>
                   </View>
                   <View>
                   {item.image !== null ? <Image
@@ -157,13 +158,13 @@ export default function NFLDetail(props) {
                     <View style={styles.tweetActionsContainer}>
                       <TouchableOpacity style={styles.commentButton}>
                         <MaterialCommunityIcons name="reply" style={styles.commentButtonIcon} size={20} color={'#09899b'} />
-                        <Text style={styles.commentsCount}>4</Text>
+                        <Text style={styles.commentsCount}>{item.total_comments}</Text>
                       </TouchableOpacity>
-                      <TouchableOpacity  style={styles.retweetButton}>
-                        {/* <EvilIcons name={'retweet'} size={25} color={(retweeted) ? "rgb(23, 191, 99)":'rgb(136, 153, 166)'}/> */}
+                       {/*<TouchableOpacity  style={styles.retweetButton}>
+                        <EvilIcons name={'retweet'} size={25} color={(retweeted) ? "rgb(23, 191, 99)":'rgb(136, 153, 166)'}/> 
                         <MaterialCommunityIcons name="repeat" size={20} color={'#09899b'} />
                         <Text style={[styles.retweetButtonIcon, {color:"#09899b",fontWeight:"bold"}]}></Text>
-                      </TouchableOpacity>
+                      </TouchableOpacity> */}
                       <TouchableOpacity style={styles.likeButton} onPress={() => likeAction()}>
                       <MaterialCommunityIcons
                         name={liked ? "heart" : "heart-outline"}
@@ -201,7 +202,7 @@ export default function NFLDetail(props) {
   return (
   
                            
-    <ScrollView style={styles.background}>
+  <ScrollView style={styles.background}>
     <View style={styles.container}>
       <View style={styles.innerContainer}>
         <View style={styles.innerHeaderContainer}>
@@ -226,100 +227,77 @@ export default function NFLDetail(props) {
               <TouchableOpacity>
               <Image
                 style={styles.photo}
-                source={{uri: import_data.user.NFL}}/>
+                source={{uri: import_data.user.Europa}}/>
               </TouchableOpacity>
           </View> 
           
         </View>
         <View style={styles.BodyContainer}>
-        <View style={styles.tweetBodyContainer}>
-          <View style={styles.tweetTextContainer}>
-            <Text style={styles.tweetText}> {import_data.content}</Text>
-          </View>
-          <View>
-            <Image
-              style={styles.stretch}
-              source={{uri: import_data.image}}
-              />
-          </View>
-          <View>
-            <View style={styles.tweetActionsContainer}>
-              <TouchableOpacity style={styles.commentButton}>
-                <MaterialCommunityIcons name="repeat" style={styles.commentButtonIcon} size={25} color={'rgb(136, 153, 166)'} />
-                <Text style={styles.commentsCount}>xxx</Text>
-              </TouchableOpacity>
-              <TouchableOpacity  style={styles.retweetButton}>
-                {/* <EvilIcons name={'retweet'} size={25} color={(retweeted) ? "rgb(23, 191, 99)":'rgb(136, 153, 166)'}/> */}
-                <MaterialCommunityIcons name="repeat" size={25} color={'rgb(136, 153, 166)'} />
-                <Text style={[styles.retweetButtonIcon, {color:"rgb(136, 153, 166)",fontWeight:"bold"}]}>xxx</Text>
-              </TouchableOpacity>
-              <TouchableOpacity style={styles.likeButton} onPress={() => setLiked((isLiked) => !isLiked)}>
-              <MaterialCommunityIcons
-                name={liked ? "heart" : "heart-outline"}
-                size={20}
-                color={liked ? "red" : "black"}
-              />
-                <Text style={[styles.likeButtonIcon, {color:"rgb(136, 153, 166)",fontWeight: "bold" }]}>{import_data.likes}</Text>
-              </TouchableOpacity>
-              <TouchableOpacity style={styles.shareButton}>
-                {/* <SimpleLineIcons name={'share'} size={16} color={'rgb(136, 153, 166)'}/> */}
-                <MaterialCommunityIcons name="share-variant" size={16} color={'rgb(136, 153, 166)'} />
-
-              </TouchableOpacity>
+          <View style={styles.tweetBodyContainer}>
+            <View style={styles.tweetTextContainer}>
+              <Text style={styles.tweetText}> {import_data.content}</Text>
             </View>
-          </View>                  
-        </View>
-        </View>
-
-        </View>
-         
-                  <View style={styles.comment}>
-                                 <TextInput style={styles.input}
-                             // label="comment"
-                             value={content}
-                             mode= 'outlined'
-                             multiline
-                             placeholder="Comment"
-                             numberOfLines={3}
-                             onChangeText={content=> setContent(content)}
-                           /> 
-                           <TouchableOpacity style={styles.commentButton}
-                           onPress={() => createLoad()}
-                           >
-                               {/* <SimpleLineIcons name={'share'} size={16} color={'rgb(136, 153, 166)'}/> */}
-                               <MaterialCommunityIcons name="send" size={30} color={'rgb(136, 153, 166)'} />
-         
-                             </TouchableOpacity>
-                           {/* <Button
-                           buttonStyle={{ width: 50, alignSelf: 'center' }}
-                           containerStyle={{ margin: 5 }}
-                           disabledStyle={{
-                             borderWidth: 2,
-                             borderColor: "#00F"
-                           }}
-                           disabledTitleStyle={{ color: "#00F" }}
-                           iconContainerStyle={{ background: "#286086" }}
-                           onPress={() => createComment()}
-                           title="Submit"
-                           titleStyle={{ marginHorizontal: 5 }} */}
-                         {/* /> */}
-                       
-        
-       
-      
-      </View>
-    </View>
-    <FlatList         
-                data={data}
-                renderItem={({ item }) => {
-                    return renderComment(item)
-                }}
-                 refreshing={loading}
-                 onRefresh={loadComment}
-                keyExtractor={(item) => `${item.id}`}
+            <View>
+              <Image
+                style={styles.stretch}
+                source={{uri: import_data.image}}
               />
+            </View>
+            <View>
+              <View style={styles.tweetActionsContainer}>
+                <TouchableOpacity style={styles.commentButton}>
+                  <MaterialCommunityIcons name="repeat" style={styles.commentButtonIcon} size={25} color={'rgb(136, 153, 166)'} />
+                  <Text style={styles.commentsCount}>xxx</Text>
+                </TouchableOpacity>
+                <TouchableOpacity  style={styles.retweetButton}>
+                  {/* <EvilIcons name={'retweet'} size={25} color={(retweeted) ? "rgb(23, 191, 99)":'rgb(136, 153, 166)'}/> */}
+                  <MaterialCommunityIcons name="repeat" size={25} color={'rgb(136, 153, 166)'} />
+                  <Text style={[styles.retweetButtonIcon, {color:"rgb(136, 153, 166)",fontWeight:"bold"}]}>xxx</Text>
+                </TouchableOpacity>
+                <TouchableOpacity style={styles.likeButton} onPress={() => setLiked((isLiked) => !isLiked)}>
+                  <MaterialCommunityIcons
+                    name={liked ? "heart" : "heart-outline"}
+                    size={20}
+                    color={liked ? "red" : "black"}
+                  />
+                  <Text style={[styles.likeButtonIcon, {color:"rgb(136, 153, 166)",fontWeight: "bold" }]}>{import_data.likes}</Text>
+                </TouchableOpacity>
+                <TouchableOpacity style={styles.shareButton}>
+                  { /* <SimpleLineIcons name={'share'} size={16} color={'rgb(136, 153, 166)'}/> */}
+                  <MaterialCommunityIcons name="share-variant" size={16} color={'rgb(136, 153, 166)'} />
+                </TouchableOpacity>
+              </View>
+            </View>                  
+          </View>
+        </View>
+      </View>   
+      <View style={styles.comment}>
+        <TextInput style={styles.input}
+          // label="comment"
+          value={content}
+          mode= 'outlined'
+          multiline
+          placeholder="Comment"
+          numberOfLines={3}
+          onChangeText={content=> setContent(content)}
+        /> 
+        <TouchableOpacity style={styles.commentButton} onPress={() => createLoad()}>
+            {/* <SimpleLineIcons name={'share'} size={16} color={'rgb(136, 153, 166)'}/> */}
+            <MaterialCommunityIcons name="send" size={30} color={'rgb(136, 153, 166)'} />
+        </TouchableOpacity>     
+      </View>
+      <FlatList         
+          data={data}
+          renderItem={({ item }) => {
+              return renderComment(item)
+          }}
+            refreshing={loading}
+            onRefresh={loadComment}
+          keyExtractor={(item) => `${item.id}`}
+        />
+    </View>
           
-    </ScrollView>
+  </ScrollView>
 
 )
 }
@@ -465,7 +443,7 @@ const styles = StyleSheet.create({
     // borderBottomWidth: 2,
     paddingBottom:10,
     paddingTop: 5,
-    marginTop:20,
+    marginTop:10,
     marginBottom: 10,
     borderRadius: 10,
     backgroundColor: '#fff',
@@ -590,6 +568,7 @@ const styles = StyleSheet.create({
   },
   tweetTextContainer: { borderColor: "blue", borderWidth: 0, },
   tweetText: { color: "black", paddingRight: 10, fontSize:18,  },
+  tweetCText: { color: "black", paddingRight: 10, fontSize:16,  },
   tweetActionsContainer: {
     borderColor: "blue",
     borderWidth: 0,
@@ -692,5 +671,56 @@ const styles = StyleSheet.create({
     commentButton:{
       marginTop: 30,
       margin: 10,
+    },
+
+
+
+
+
+    // comments render comments
+    containerComment: {
+      borderBottomColor: "black",
+      // borderBottomWidth: 2,
+      paddingBottom:10,
+      paddingTop: 5,
+      marginTop:3,
+      marginBottom: 3,
+      borderRadius: 10,
+      backgroundColor: '#fff',
+      marginLeft: 7.5,
+      marginRight: 7.5,
+      // flexDirection: "column",
+    },
+    photoComment: {
+      width: 40,
+      height: 40,
+      borderRadius: 40,
+      // marginTop: 15
+    },
+    infoComment: {
+      width:'50%',
+      // flex: 0.77,
+      borderColor: "yellow",
+      // flexDirection: "column",
+      borderWidth: 0
+    },
+    userDetailsComment: {
+      borderColor: "blue",
+      // borderWidth: 1,
+      marginBottom: 0,
+      // marginTop: 10,
+      marginLeft: 10,
+    },
+    userNameComment: {
+      color: "black",
+      fontWeight: "bold",
+      fontSize:14, 
+    },
+    userHandleAndTimeComment: {
+      fontWeight: "bold",
+      color: "#09899b",
+      fontSize: 14,
+      marginLeft: 5,
+      fontStyle: 'italic',
     }
 })
