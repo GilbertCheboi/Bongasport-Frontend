@@ -9,6 +9,7 @@ import SettingsScreen from '../screens/SettingsScreen';
 import BaseballStack from './BaseballStack';
 import FootballStack from './FootballStack';
 import ProfileScreen from '../screens/ProfileScreen';
+import MyVideoPlayer from '../screens/videos/MyVideoPlayer';
 
 
 
@@ -31,6 +32,15 @@ export default function TabNavigator() {
           tabBarLabel: 'Notification',
           tabBarIcon: ({ color }) => (
             <MaterialCommunityIcons name="bell" color={color} size={26} />
+          ),
+        }} />
+        <Tab.Screen name="Videos" component={MyVideoPlayer}
+        options= {{
+          headerShown: true,
+          // tabBarBadge: 6,
+          tabBarLabel: 'Videos',
+          tabBarIcon: ({ color }) => (
+            <MaterialCommunityIcons name="video" color={color} size={26} />
           ),
         }} />
         {/* <Tab.Screen name="Profile" component={ProfileScreen} options={{

@@ -1,9 +1,10 @@
-import { ScrollView, Text, StyleSheet, View, Alert,Image } from 'react-native'
+import { ScrollView, Text, StyleSheet, View, Alert,Image, TouchableOpacity, } from 'react-native'
 import React, { useState, useContext } from 'react'
 import { TextInput } from 'react-native-paper'
 import { Button } from '@rneui/base'
 import * as ImagePicker from 'expo-image-picker';
 import { AuthContext } from '../context/AuthContext';
+import { MaterialCommunityIcons } from '@expo/vector-icons';
 // import * as DocumentPicker from 'expo-document-picker';
 
 
@@ -18,13 +19,18 @@ export default function FootballCreate(props) {
     // const csrftoken = userToken;
 
     const createLoad =() => {
+      
         const data = new FormData();
         data.append('content', content);
+        if (imageUp !== null)
+        {
         data.append('image', {
           uri: imageUp,
             name: 'my-image.png',
             type: 'image/png', 
-        });
+        });}
+        Alert.alert("          Sent!", "Your post was sent successfully!")
+        props.navigation.navigate('Football Home')
         fetch('http://gilscore.azurewebsites.net/api/Europa/create/', {
           method: 'POST',
           headers: {
@@ -38,7 +44,8 @@ export default function FootballCreate(props) {
         .then(resp => resp.json())
         .then(data => { 
           console.log(data)
-          props.navigation.navigate('Football Home')
+         
+          // props.navigation.navigate('Football Home')
         })
         .catch(error=> Alert.alert('Error', error.message))
       }
@@ -79,8 +86,8 @@ export default function FootballCreate(props) {
                 </View>              
                 <View style={styles.info}>
                   <View style={styles.userDetails}>
-                    <Text style={styles.userName}>Deno
-                      <Text style={styles.userHandleAndTime}>  @Sober </Text>
+                    <Text style={styles.userName}>{userInfo.First_Name} {userInfo.Last_Name}
+                      <Text style={styles.userHandleAndTime}>@{userInfo.user.username}</Text>
                     </Text>
                   </View>
                 </View>
@@ -89,16 +96,26 @@ export default function FootballCreate(props) {
       <TextInput style={styles.input}
       // label="content"
       value={content}
-      // mode= 'outlined'
+      mode= 'outlined'
       maxLength={240}
-      placeholder="What's up with your favorite team "
+      placeholder="What's up? "
       multiline
       numberOfLines={6}
       onChangeText={content => setContent(content)}
     />
-    <Button title="Pick an image from camera roll" onPress={selectFile} />
+    <View style={{flexDirection: 'row', marginTop: 10, justifyContent: 'space-between',}}>
+        <TouchableOpacity style={styles.commentButton} onPress={() => selectFile()}>
+            {/* <SimpleLineIcons name={'share'} size={16} color={'rgb(136, 153, 166)'}/> */}
+            <MaterialCommunityIcons name="image" size={26} color={'rgb(136, 153, 166)'} />
+        </TouchableOpacity>     
+        <TouchableOpacity style={styles.commentButton} onPress={() => createLoad()}>
+            {/* <SimpleLineIcons name={'share'} size={16} color={'rgb(136, 153, 166)'}/> */}
+            <MaterialCommunityIcons name="send" size={26} color={'rgb(136, 153, 166)'} />
+        </TouchableOpacity>     
+        </View>
+    {/* <Button title="Pick an image from camera roll" onPress={selectFile} /> */}
       {imageUp && <Image source={{ uri:imageUp }} style={{ width: 200, height: 200 }} />}
-    <Button
+    {/* <Button
       buttonStyle={{ width: 150, alignSelf: 'center' }}
       containerStyle={{ margin: 5 }}
       disabledStyle={{
@@ -110,7 +127,7 @@ export default function FootballCreate(props) {
       onPress={() => createLoad()}
       title="Post"
       titleStyle={{ marginHorizontal: 5 }}
-    />
+    /> */}
     </ScrollView>
   )
 }
@@ -153,5 +170,9 @@ const styles= StyleSheet.create({
     borderBottomWidth: 0.2,
     // borderLeftWidth: 1,
     justifyContent: 'space-between',
+  },
+  commentButton:{
+    marginTop: 5,
+    margin: 15,
   },
 })
