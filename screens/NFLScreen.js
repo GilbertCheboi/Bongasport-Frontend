@@ -7,16 +7,16 @@ import { useNavigation } from '@react-navigation/native';
 import { Header, Icon } from "@rneui/base";
 // import { Header  as HeaderRNE, HeaderProps, Icon  } from "@rneui/themed";
 import { AuthContext } from '../context/AuthContext';
+import Video from 'react-native-video';
 
 
-export default function NFLScreen(props) {
-
+export default function NBAScreen(props) {
   const [data, setData] = useState([]) 
   const [loading, setLoading] = useState(true)
   const [liked, setLiked] = useState(false);
   const {userToken, userInfo} = useContext(AuthContext);
 
-  const loadData = () => { 
+  const loadData = () => {
     fetch('http://gilscore.azurewebsites.net/api/NFL/feed/', {
       method: 'GET',
       headers:{
@@ -28,7 +28,8 @@ export default function NFLScreen(props) {
         setData(data.results)
         setLoading(false)
      })
-     .catch(error => Alert.alert('Error', error.message))
+     .catch(error =>
+      console.log(error, 'Error'))
    }
 
    const likeAction =() => {
@@ -47,9 +48,17 @@ export default function NFLScreen(props) {
     // .catch(error=> Alert.alert('Error', error.message))
   }
  
+  // useEffect(() => {
+  //    loadData();
+  //   }, []);
   useEffect(() => {
-     loadData();
-    }, [])  
+      const interval = setInterval(() => {
+        // Perform the reload here
+        loadData();
+      }, 2000);
+  
+      return () => clearInterval(interval);
+    },);
 
     const clickedItem = (data) => { 
       props.navigation.navigate('Detail NFL',{data:data}) }
@@ -88,52 +97,69 @@ export default function NFLScreen(props) {
                       style={styles.photo}
                       source={{uri: item.user.NFL}}/>
                     </TouchableOpacity>
-                </View> 
-                
+                </View>   
               </View>
               <View style={styles.BodyContainer}>
-              <View style={styles.tweetBodyContainer}>
-                <View style={styles.tweetTextContainer}>
-                  <Text style={styles.tweetText}> {item.content}</Text>
-                </View>
-                <View>
-                {item.image !== null ? <Image
+                <View style={styles.tweetBodyContainer}>
+                  <View style={styles.tweetTextContainer}>
+                    <Text style={styles.tweetText}> {item.content}</Text>
+                  </View>
+                  <View>
+                  {item.image !== null ? <Image
                     style={styles.stretch}
                     source={{uri: item.image}}
+                    // /> : 
+                    // item.video !== null ? <Video
+                      // source={{ uri: 'https://example.com/video.mp4' }}
+                      // style={{ flex: 1 }}
                     /> : <Image
                     style={{height: "auto"}}
                     source={{uri: item.image}}
                     />}
                 </View>
-                <View>
+                <View >
+                  <View style={styles.commentLikeContainer}>
+                  <Text style={styles.commentsCount}>{item.total_comments} Comments</Text>
+                  <Text style={[styles.retweetButtonIcon, {color:"#8899a6",}]}> Reposts</Text> 
+                  <Text style={[styles.likeButtonIcon, {color:"#8899a6"}]}>{item.likes} Likes</Text>
+                  </View>
                   <View style={styles.tweetActionsContainer}>
                     <TouchableOpacity style={styles.commentButton}>
-                      <MaterialCommunityIcons name="reply" style={styles.commentButtonIcon} size={20} color={'#09899b'} />
-                      <Text style={styles.commentsCount}>{item.total_comments}</Text>
+                      <View style = {styles.iconContainer}>
+                      <View>
+                      <MaterialCommunityIcons name="message-reply-text" style={styles.commentButtonIcon} size={16} color={'#8899a6'} />
+                      </View>
+                      <Text style = {styles.iconContainerText}>Comment</Text>
+                      </View>
                     </TouchableOpacity>
                     <TouchableOpacity  style={styles.retweetButton}>
-                      {/* <EvilIcons name={'retweet'} size={25} color={(retweeted) ? "rgb(23, 191, 99)":'rgb(136, 153, 166)'}/> */}
-                      <MaterialCommunityIcons name="repeat" size={20} color={'#09899b'} />
-                      <Text style={[styles.retweetButtonIcon, {color:"#09899b",fontWeight:"bold"}]}></Text>
+                    <View style = {styles.iconContainer}>
+                      <View>
+                      <MaterialCommunityIcons name="repeat" size={16} color={'#8899a6'} />
+                      </View>
+                      <Text style = {styles.iconContainerText}>Repost</Text>
+                      </View>
                     </TouchableOpacity>
                     <TouchableOpacity style={styles.likeButton} onPress={() => likeAction()}>
-                    <MaterialCommunityIcons
-                      name={liked ? "heart" : "heart-outline"}
-                      size={20}
-                      color={liked ? "red" : "black"}
-                    />
-                      <Text style={[styles.likeButtonIcon, {color:"rgb(136, 153, 166)",fontWeight: "bold" }]}>{item.likes}</Text>
+                    <View style = {styles.iconContainer}>
+                      <View>
+                    <MaterialCommunityIcons name="heart-outline" size = {16} color={'#8899a6'}/>
+                      </View>
+                      <Text style = {styles.iconContainerText}>Like</Text>
+                      </View>
                     </TouchableOpacity>
                     <TouchableOpacity style={styles.shareButton}>
+                    <View style = {styles.iconContainer}>
                       {/* <SimpleLineIcons name={'share'} size={16} color={'rgb(136, 153, 166)'}/> */}
-                      <MaterialCommunityIcons name="share-variant" size={16} color={'#09899b'} />
+                      <MaterialCommunityIcons name="share-variant" size={16} color={'#8899a6'} />
+                      <Text style = {styles.iconContainerText}>Share</Text>
+                      </View>
 
                     </TouchableOpacity>
                   </View>
                 </View>                  
               </View>
               </View>
-           
             </View>
           </View>
           </View>
@@ -164,11 +190,12 @@ const navigation =useNavigation();
     }
       centerContainerStyle={{}}
       // containerStyle={{ width: 350 }}
-      leftComponent={ <View style={styles.headerRight}>
+      leftComponent={ 
+      <View style={styles.headerRight}>
       <TouchableOpacity
-        style={{ marginLeft: 10 }}>
-        <Icon name= "menu" color="white"  onPress={()=> navigation.openDrawer()}/>
-      </TouchableOpacity>
+            style={{ marginLeft: 10 }}>
+            <Icon name= "menu" color="white"  onPress={()=> navigation.openDrawer()}/>
+          </TouchableOpacity>
     </View>}
     // { icon: "menu", color: "#fff" }}
       leftContainerStyle={{}}
@@ -182,7 +209,11 @@ const navigation =useNavigation();
       </TouchableOpacity>
           
         </View>
-      }
+    }
+      // rightComponent={{
+      //   icon: "person-outline",
+      //   color: "#fff"
+      // }}
       rightContainerStyle={{}}
       statusBarProps={{}}
     />
@@ -219,8 +250,8 @@ const navigation =useNavigation();
       
     /> */}
       <FAB
-      // style={{ width: "40%", margin: 50, marginBottom: 200 }}
       style={{ width: "10%", margin: 50, marginBottom: "25%" }}
+      // style={{margin:50, marginBottom: 2 }}
       placement="right"
       color="#09899b"
       size="large"
@@ -235,7 +266,7 @@ const navigation =useNavigation();
 
 const styles = StyleSheet.create({
   background:{
-    backgroundColor:'#286086'
+    backgroundColor:'#DCDCDC'
   }, 
   heading: {
     color: 'white',
@@ -245,7 +276,7 @@ const styles = StyleSheet.create({
   container: {
     borderBottomColor: "black",
     // borderBottomWidth: 2,
-    paddingBottom:20,
+    paddingBottom: 5,
     paddingTop: 13,
     marginTop:5,
     // marginBottom: 10,
@@ -264,7 +295,7 @@ const styles = StyleSheet.create({
     // marginTop: 5
   },
   innerContainer: {
-    borderColor: "green",
+    // borderColor: "green",
     flexDirection: "column",
     borderWidth: 0,
     height: "auto",
@@ -296,7 +327,7 @@ const styles = StyleSheet.create({
 
   innerHeaderContainer: { 
     // backgroundColor: '#FFf',
-     backgroundColor: '#B6D0E2',
+     backgroundColor: '#DCDCDC',
      borderRadius: 10,
     // alignItems:'center',
     borderColor: "#09899b",
@@ -358,13 +389,20 @@ const styles = StyleSheet.create({
   tweetActionsContainer: {
     borderColor: "blue",
     borderWidth: 0,
-    marginTop: 5,
+    // marginTop: 5,
+    paddingTop: 5,
     flexDirection: "row",
     paddingBottom: 5,
     justifyContent: 'space-between',
-    borderColor: "#09899b",
+    borderColor: "#8899a6",
     borderTopWidth: 0.3,
     width:"95%",
+  },
+  commentLikeContainer: {
+    flexDirection: "row",
+    padding: 10,
+    marginTop: 5,
+    justifyContent: 'space-between',
   },
   commentButton: {
     paddingLeft: 0,
@@ -373,26 +411,38 @@ const styles = StyleSheet.create({
     borderColor: "red",
     borderWidth: 0
   },
+  iconContainer: {
+    flexDirection: 'column',
+    alignItems: "center" ,
+  },
+  iconContainerText: {
+    color: "#A9A9A9",
+    paddingRight: 10,
+    fontSize: 12,
+  },
   commentButtonIcon: {
     margin: 0,
     borderColor: "red",
     borderWidth: 0
   },
   commentsCount: {
-    position: "absolute",
-    left: 27,
-    color: "rgb(136, 153, 166)",
+    // position: "absolute",
+    // left: 27,
+    fontSize:12,
+    // fontWeight: "bold",
+    color:"#8899a6",
   },
   retweetButton: {
-    padding: 5,
+    // padding: 5,
     alignItems: "center",
     flexDirection: "row",
     borderColor: "red",
     borderWidth: 0
   },
   retweetButtonIcon: {
-    position: "absolute",
-    left: 27,  
+    // position: "absolute",
+    // left: 27,  
+    fontSize:12,
   },
   likeButton: {
     alignItems: "center",
@@ -401,12 +451,13 @@ const styles = StyleSheet.create({
     borderWidth: 0
   },
   likeButtonIcon: {
-    position: "absolute",  
-    marginLeft: 3,
-    left: 27,
+    // position: "absolute",  
+    // marginLeft: 3,
+    // left: 27,
+    fontSize:12,
   },
   shareButton: {
-    padding: 5,
+    // padding: 5,
     alignItems: "center",
     flexDirection: "row",
     borderColor: "red",

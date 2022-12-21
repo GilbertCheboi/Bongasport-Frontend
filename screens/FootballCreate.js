@@ -13,7 +13,7 @@ import DocumentPicker from 'react-native-document-picker';
 
 export default function FootballCreate(props) {
 
-    const [content, setContent]=  useState(null);
+    const [content, setContent]=  useState('');
     const [imageUp, setImageUp] = useState(null);
     const {userToken, userInfo} = useContext(AuthContext);
     // const csrftoken = userToken;
